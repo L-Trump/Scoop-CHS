@@ -15,6 +15,12 @@
     Useful for hash updates.
 .PARAMETER SkipUpdated
     Updated manifests will not be shown.
+.PARAMETER Cookie
+    Set Cookies
+.PARAMETER UserAgent
+    Set User-Agent
+.PARAMETER Encode
+    Set Encoding Type
 .EXAMPLE
     PS BUCKETROOT > .\bin\checkver.ps1
     Check all manifest inside default directory.
@@ -60,6 +66,9 @@ param(
     [Switch] $Update,
     [Switch] $ForceUpdate,
     [Switch] $SkipUpdated,
+    [String] $Cookie,
+    [String] $UserAgent,
+    [String] $Encode,
     [String] $Version = ''
 )
 
@@ -97,10 +106,23 @@ $Queue | ForEach-Object {
     $substitutions = get_version_substitutions $json.version
 
     $wc = New-Object Net.Webclient
+
     if ($json.checkver.useragent) {
         $wc.Headers.Add('User-Agent', (substitute $json.checkver.useragent $substitutions))
     } else {
-        $wc.Headers.Add('User-Agent', (Get-UserAgent))
+        if ($UserAgent){
+            $wc.Headers.Add('User-Agent', (substitute $UserAgent $substitutions))
+        } else {
+            $wc.Headers.Add('User-Agent', (Get-UserAgent))
+        }
+    }
+
+    if ($json.checkver.cookie) {
+        $wc.Headers.Add('cookie', $json.checkver.cookie)
+    } else {
+        if ($Cookie) {
+            $wc.Headers.Add('cookie', $Cookie)
+        }
     }
     Register-ObjectEvent $wc downloadstringcompleted -ErrorAction Stop | Out-Null
 
@@ -128,6 +150,14 @@ $Queue | ForEach-Object {
         $regex = $githubRegex
     }
 
+    if ($json.checkver.encode) {
+        $wc.Encoding = [System.Text.Encoding]::GetEncoding($json.checkver.encode)
+    } else {
+        if($Encode) {
+            $wc.Encoding = [System.Text.Encoding]::GetEncoding($Encode)
+        }
+    }
+
     if ($json.checkver.re) {
         $regex = $json.checkver.re
     }
@@ -144,7 +174,6 @@ $Queue | ForEach-Object {
     if ($json.checkver.xpath) {
         $xpath = $json.checkver.xpath
     }
-
     if ($json.checkver.replace -and $json.checkver.replace.GetType() -eq [System.String]) {
         $replace = $json.checkver.replace
     }
@@ -167,7 +196,6 @@ $Queue | ForEach-Object {
         reverse  = $reverse;
         replace  = $replace;
     }
-
     $wc.Headers.Add('Referer', (strip_filename $url))
     $wc.DownloadStringAsync($url, $state)
 }
