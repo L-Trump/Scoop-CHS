@@ -1,5 +1,5 @@
-# Usage: scoop home <app>
-# Summary: Opens the app homepage
+# Usage: scoop home <应用名>
+# Summary: 打开应用的主页
 param($app)
 
 . "$psscriptroot\..\lib\core.ps1"
@@ -13,12 +13,12 @@ if($app) {
     $manifest, $bucket = find_manifest $app
     if($manifest) {
         if([string]::isnullorempty($manifest.homepage)) {
-            abort "Could not find homepage in manifest for '$app'."
+            abort "无法在Manifest中找到 '$app' 的主页."
         }
         Start-Process $manifest.homepage
     }
     else {
-        abort "Could not find manifest for '$app'."
+        abort "无法找到 '$app' 的Manifest."
     }
 } else { my_usage }
 

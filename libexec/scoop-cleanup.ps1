@@ -1,13 +1,13 @@
-# Usage: scoop cleanup <app> [options]
-# Summary: Cleanup apps by removing old versions
-# Help: 'scoop cleanup' cleans Scoop apps by removing old versions.
-# 'scoop cleanup <app>' cleans up the old versions of that app if said versions exist.
+# Usage: scoop cleanup <应用名> [选项]
+# Summary: 清除应用的旧版本残留
+# Help: 'scoop cleanup' 可以用来清除应用的旧版本残留.
+# 'scoop cleanup <应用名>' 会删除指定应用的所有旧版本文件
 #
-# You can use '*' in place of <app> to cleanup all apps.
+# 你可以使用通配符 '*' 来清除清理所有应用
 #
 # Options:
-#   -g, --global       Cleanup a globally installed app
-#   -k, --cache        Remove outdated download cache
+#   -g, --global       清理一个全局安装的应用
+#   -k, --cache        清理已经过时的缓存
 
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
@@ -24,10 +24,10 @@ if ($err) { "scoop cleanup: $err"; exit 1 }
 $global = $opt.g -or $opt.global
 $cache = $opt.k -or $opt.cache
 
-if (!$apps) { 'ERROR: <app> missing'; my_usage; exit 1 }
+if (!$apps) { '错误: 未指定应用'; my_usage; exit 1 }
 
 if ($global -and !(is_admin)) {
-    'ERROR: you need admin rights to cleanup global apps'; exit 1
+    '错误: 需要管理员权限来清理全局应用'; exit 1
 }
 
 function cleanup($app, $global, $verbose, $cache) {
@@ -37,11 +37,11 @@ function cleanup($app, $global, $verbose, $cache) {
     }
     $versions = versions $app $global | Where-Object { $_ -ne $current_version -and $_ -ne 'current' }
     if (!$versions) {
-        if ($verbose) { success "$app is already clean" }
+        if ($verbose) { success "无需清理 $app" }
         return
     }
 
-    write-host -f yellow "Removing $app`:" -nonewline
+    write-host -f yellow "移除 $app`:" -nonewline
     $versions | ForEach-Object {
         $version = $_
         write-host " $version" -nonewline
@@ -73,7 +73,7 @@ if ($apps) {
     }
 
     if (!$verbose) {
-        success 'Everything is shiny now!'
+        success '已清理完毕!'
     }
 }
 

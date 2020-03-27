@@ -1,10 +1,10 @@
-# Usage: scoop uninstall <app> [options]
-# Summary: Uninstall an app
+# Usage: scoop uninstall <应用名> [选项]
+# Summary: 卸载应用
 # Help: e.g. scoop uninstall git
 #
 # Options:
-#   -g, --global   Uninstall a globally installed app
-#   -p, --purge    Remove all persistent data
+#   -g, --global   卸载一个全局应用
+#   -p, --purge    移除所有的保留数据（persist）
 
 . "$PSScriptRoot\..\lib\core.ps1"
 . "$PSScriptRoot\..\lib\manifest.ps1"
@@ -29,13 +29,13 @@ $global = $opt.g -or $opt.global
 $purge = $opt.p -or $opt.purge
 
 if (!$apps) {
-    error '<app> missing'
+    error '未指定应用'
     my_usage
     exit 1
 }
 
 if ($global -and !(is_admin)) {
-    error 'You need admin rights to uninstall global apps.'
+    error '需要管理员权限来卸载全局应用.'
     exit 1
 }
 
@@ -51,7 +51,7 @@ if (!$apps) { exit 0 }
     ($app, $global) = $_
 
     $version = current_version $app $global
-    Write-Host "Uninstalling '$app' ($version)."
+    Write-Host "正在卸载 '$app' ($version)."
 
     $dir = versiondir $app $version $global
     $persist_dir = persistdir $app $global
@@ -59,7 +59,7 @@ if (!$apps) { exit 0 }
     #region Workaround for #2952
     $processdir = appdir $app $global | Resolve-Path | Select-Object -ExpandProperty Path
     if (Get-Process | Where-Object { $_.Path -like "$processdir\*" }) {
-        error "Application is still running. Close all instances and try again."
+        error "应用正在运行，请关掉所有相关进程后再试"
         continue
     }
     #endregion Workaround for #2952
@@ -67,7 +67,7 @@ if (!$apps) { exit 0 }
     try {
         Test-Path $dir -ErrorAction Stop | Out-Null
     } catch [UnauthorizedAccessException] {
-        error "Access denied: $dir. You might need to restart."
+        error "拒绝访问: $dir. 你也许需要重启资源管理器或者重启电脑."
         continue
     }
 
@@ -95,7 +95,7 @@ if (!$apps) { exit 0 }
         Remove-Item $dir -Recurse -Force -ErrorAction Stop
     } catch {
         if (Test-Path $dir) {
-            error "Couldn't remove '$(friendly_path $dir)'; it may be in use."
+            error "无法移除 '$(friendly_path $dir)'; 它也许正在被使用，可以重启后再试."
             continue
         }
     }
@@ -103,14 +103,14 @@ if (!$apps) { exit 0 }
     # remove older versions
     $old = @(versions $app $global)
     foreach ($oldver in $old) {
-        Write-Host "Removing older version ($oldver)."
+        Write-Host "正在移除旧版本 ($oldver)."
         $dir = versiondir $app $oldver $global
         try {
             # unlink all potential old link before doing recursive Remove-Item
             unlink_persist_data $dir
             Remove-Item $dir -Recurse -Force -ErrorAction Stop
         } catch {
-            error "Couldn't remove '$(friendly_path $dir)'; it may be in use."
+            error "无法移除 '$(friendly_path $dir)'; 它也许正在被使用，可以重启后再试."
             continue app_loop
         }
     }
@@ -128,20 +128,20 @@ if (!$apps) { exit 0 }
 
     # purge persistant data
     if ($purge) {
-        Write-Host 'Removing persisted data.'
+        Write-Host '移除保留数据.'
         $persist_dir = persistdir $app $global
 
         if (Test-Path $persist_dir) {
             try {
                 Remove-Item $persist_dir -Recurse -Force -ErrorAction Stop
             } catch {
-                error "Couldn't remove '$(friendly_path $persist_dir)'; it may be in use."
+                error "无法移除 '$(friendly_path $persist_dir)'; 它也许正在被使用，可以重启后再试."
                 continue
             }
         }
     }
 
-    success "'$app' was uninstalled."
+    success "'$app' 卸载成功."
 }
 
 exit 0

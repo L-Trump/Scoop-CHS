@@ -59,7 +59,7 @@ function Expand-7zipArchive {
         try {
             $7zPath = (Get-Command '7z' -CommandType Application | Select-Object -First 1).Source
         } catch [System.Management.Automation.CommandNotFoundException] {
-            abort "Cannot find external 7-Zip (7z.exe) while '7ZIPEXTRACT_USE_EXTERNAL' is 'true'!`nRun 'scoop config 7ZIPEXTRACT_USE_EXTERNAL false' or install 7-Zip manually and try again."
+            abort "无法找到 7-Zip (7z.exe) ,但 '7ZIPEXTRACT_USE_EXTERNAL' 为 'true'!`n执行 'scoop config 7ZIPEXTRACT_USE_EXTERNAL false' 或者手动安装 7-Zip 并再次尝试."
         }
     } else {
         $7zPath = Get-HelperPath -Helper 7zip
@@ -80,7 +80,7 @@ function Expand-7zipArchive {
     }
     $Status = Invoke-ExternalCommand $7zPath $ArgList -LogPath $LogPath
     if (!$Status) {
-        abort "Failed to extract files from $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket 'decompress error')"
+        abort "无法解压 $Path 中的文件.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket '解压失败')"
     }
     if (!$IsTar -and $ExtractDir) {
         movedir "$DestinationPath\$ExtractDir" $DestinationPath | Out-Null
@@ -95,7 +95,7 @@ function Expand-7zipArchive {
             $TarFile = (Get-Content -Path $LogPath)[-4] -replace '.{53}(.*)', '$1' # get inner tar file name
             Expand-7zipArchive -Path "$DestinationPath\$TarFile" -DestinationPath $DestinationPath -ExtractDir $ExtractDir -Removal
         } else {
-            abort "Failed to list files in $Path.`nNot a 7-Zip supported archive file."
+            abort "无法获得 $Path 的文件列表.`n这不是一个受支持的7zip格式."
         }
     }
     if ($Removal) {
@@ -139,7 +139,7 @@ function Expand-MsiArchive {
     }
     $Status = Invoke-ExternalCommand $MsiPath $ArgList -LogPath $LogPath
     if (!$Status) {
-        abort "Failed to extract files from $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket 'decompress error')"
+        abort "无法解压 $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket '解压失败')"
     }
     if ($ExtractDir -and (Test-Path "$DestinationPath\SourceDir")) {
         movedir "$DestinationPath\SourceDir\$ExtractDir" $OriDestinationPath | Out-Null
@@ -191,7 +191,7 @@ function Expand-InnoArchive {
     }
     $Status = Invoke-ExternalCommand (Get-HelperPath -Helper Innounp) $ArgList -LogPath $LogPath
     if (!$Status) {
-        abort "Failed to extract files from $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket 'decompress error')"
+        abort "无法解压 $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket '解压失败')"
     }
     if (Test-Path $LogPath) {
         Remove-Item $LogPath -Force
@@ -231,17 +231,17 @@ function Expand-ZipArchive {
                 Expand-7zipArchive $Path $DestinationPath -Removal
                 return
             } else {
-                abort "Unzip failed: Windows can't handle the long paths in this zip file.`nRun 'scoop install 7zip' and try again."
+                abort "Zip解压失败: Windows 无法处理这个zip压缩中过长的路径.`n运行 'scoop install 7zip' 并再次尝试."
             }
         } catch [System.IO.IOException] {
             if (Test-HelperInstalled -Helper 7zip) {
                 Expand-7zipArchive $Path $DestinationPath -Removal
                 return
             } else {
-                abort "Unzip failed: Windows can't handle the file names in this zip file.`nRun 'scoop install 7zip' and try again."
+                abort "Zip解压失败: Windows 无法处理这个zip压缩中的文件名.`n运行 'scoop install 7zip' 并再次尝试."
             }
         } catch {
-            abort "Unzip failed: $_"
+            abort "Zip解压失败: $_"
         }
     } else {
         # Use Expand-Archive to unzip in PowerShell 5+
@@ -280,7 +280,7 @@ function Expand-DarkArchive {
     }
     $Status = Invoke-ExternalCommand (Get-HelperPath -Helper Dark) $ArgList -LogPath $LogPath
     if (!$Status) {
-        abort "Failed to extract files from $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket 'decompress error')"
+        abort "无法解压 $Path.`nLog file:`n  $(friendly_path $LogPath)`n$(new_issue_msg $app $bucket '解压失败')"
     }
     if (Test-Path $LogPath) {
         Remove-Item $LogPath -Force

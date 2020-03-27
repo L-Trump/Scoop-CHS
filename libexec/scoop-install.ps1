@@ -1,20 +1,23 @@
-# Usage: scoop install <app> [options]
-# Summary: Install apps
-# Help: e.g. The usual way to install an app (uses your local 'buckets'):
+# Usage: scoop install <[仓库]/应用名> [选项]
+# Summary: 安装应用
+# Help: e.g. 常规安装 (使用已添加的仓库):
 #      scoop install git
+# 
+# 指定仓库安装（避免多个仓库拥有同一软件）:
+#      scoop install main/git
 #
-# To install an app from a manifest at a URL:
+# 通过网络Manifest安装应用:
 #      scoop install https://raw.githubusercontent.com/ScoopInstaller/Main/master/bucket/runat.json
 #
-# To install an app from a manifest on your computer
+# 通过本地Manifest安装应用：
 #      scoop install \path\to\app.json
 #
 # Options:
-#   -g, --global              Install the app globally
-#   -i, --independent         Don't install dependencies automatically
-#   -k, --no-cache            Don't use the download cache
-#   -s, --skip                Skip hash validation (use with caution!)
-#   -a, --arch <32bit|64bit>  Use the specified architecture, if the app supports it
+#   -g, --global              将应用作为全局应用安装
+#   -i, --independent         不自动安装依赖
+#   -k, --no-cache            不使用下载缓存
+#   -s, --skip                跳过Hash数据校验（谨慎使用）
+#   -a, --arch <32bit|64bit>  安装特定架构的应用（如果应用支持）
 
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
@@ -39,9 +42,9 @@ function is_installed($app, $global) {
 
         $version = @(versions $app $global)[-1]
         if (!(install_info $app $version $global)) {
-            error "It looks like a previous installation of $app failed.`nRun 'scoop uninstall $app$(gf $global)' before retrying the install."
+            error "看起来 $app 的前一次安装并未成功.`n执行 'scoop uninstall $app$(gf $global)' 后再试."
         }
-        warn "'$app' ($version) is already installed.`nUse 'scoop update $app$(gf $global)' to install a new version."
+        warn "'$app' ($version) 已安装.`n使用 'scoop update $app$(gf $global)' 来更新应用到新版本."
         return $true
     }
     return $false
@@ -58,13 +61,13 @@ $architecture = default_architecture
 try {
     $architecture = ensure_architecture ($opt.a + $opt.arch)
 } catch {
-    abort "ERROR: $_"
+    abort "错误: $_"
 }
 
-if (!$apps) { error '<app> missing'; my_usage; exit 1 }
+if (!$apps) { error '未指定应用'; my_usage; exit 1 }
 
 if ($global -and !(is_admin)) {
-    abort 'ERROR: you need admin rights to install global apps'
+    abort '错误: 需要管理员权限来安装全局应用'
 }
 
 if (is_scoop_outdated) {
@@ -94,7 +97,7 @@ if ($specific_versions.length -gt 0) {
 $specific_versions_paths = $specific_versions | ForEach-Object {
     $app, $bucket, $version = parse_app $_
     if (installed_manifest $app $version) {
-        abort "'$app' ($version) is already installed.`nUse 'scoop update $app$global_flag' to install a new version."
+        abort "'$app' ($version) 已安装.`n使用 'scoop update $app$global_flag' 来更新到新版本."
     }
 
     generate_user_manifest $app $bucket $version
@@ -115,13 +118,13 @@ $apps, $skip = prune_installed $apps $global
 $skip | Where-Object { $explicit_apps -contains $_ } | ForEach-Object {
     $app, $null, $null = parse_app $_
     $version = @(versions $app $global)[-1]
-    warn "'$app' ($version) is already installed. Skipping."
+    warn "'$app' ($version) 已存在，跳过."
 }
 
 $suggested = @{ };
 if (Test-Aria2Enabled) {
-    warn "Scoop uses 'aria2c' for multi-connection downloads."
-    warn "Should it cause issues, run 'scoop config aria2-enabled false' to disable it."
+    warn "Scoop正在使用 'aria2c' 进行多线程下载."
+    warn "如果这导致了一些问题，可以使用 'scoop config aria2-enabled false' 来禁用它."
 }
 $apps | ForEach-Object { install_app $_ $architecture $global $suggested $use_cache $check_hash }
 

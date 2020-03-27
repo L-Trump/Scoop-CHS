@@ -39,14 +39,14 @@ function getopt($argv, $shortopts, $longopts) {
             if($longopt) {
                 if($longopt.endswith('=')) { # requires arg
                     if($i -eq $argv.length - 1) {
-                        return err "Option --$name requires an argument."
+                        return err "配置 --$name 需要一个参数."
                     }
                     $opts.$name = $argv[++$i]
                 } else {
                     $opts.$name = $true
                 }
             } else {
-                return err "Option --$name not recognized."
+                return err "配置 --$name 不存在."
             }
         } elseif($arg.startswith('-') -and $arg -ne '-') {
             for($j = 1; $j -lt $arg.length; $j++) {
@@ -56,14 +56,14 @@ function getopt($argv, $shortopts, $longopts) {
                     $shortopt = $matches[0]
                     if($shortopt[1] -eq ':') {
                         if($j -ne $arg.length -1 -or $i -eq $argv.length - 1) {
-                            return err "Option -$letter requires an argument."
+                            return err "配置 -$letter 需要一个参数."
                         }
                         $opts.$letter = $argv[++$i]
                     } else {
                         $opts.$letter = $true
                     }
                 } else {
-                    return err "Option -$letter not recognized."
+                    return err "配置 -$letter 不存在."
                 }
             }
         } else {

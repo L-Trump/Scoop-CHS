@@ -82,40 +82,40 @@ function find_manifest($app, $bucket) {
 }
 
 function add_bucket($name, $repo) {
-    if (!$name) { "<name> missing"; $usage_add; exit 1 }
+    if (!$name) { "<name> 参数缺失"; $usage_add; exit 1 }
     if (!$repo) {
         $repo = known_bucket_repo $name
-        if (!$repo) { "Unknown bucket '$name'. Try specifying <repo>."; $usage_add; exit 1 }
+        if (!$repo) { "未知的仓库 '$name'. 请尝试指定Git仓库地址 <repo>."; $usage_add; exit 1 }
     }
 
     if (!(Test-CommandAvailable git)) {
-        abort "Git is required for buckets. Run 'scoop install git' and try again."
+        abort "添加仓库需要Git的支持. 运行 'scoop install git' 后再次尝试."
     }
 
     $dir = Find-BucketDirectory $name -Root
     if (test-path $dir) {
-        warn "The '$name' bucket already exists. Use 'scoop bucket rm $name' to remove it."
+        warn "仓库 '$name' 已存在. 使用 'scoop bucket rm $name' 来移除它."
         exit 0
     }
 
-    write-host 'Checking repo... ' -nonewline
+    write-host '检查仓库地址... ' -nonewline
     $out = git_ls_remote $repo 2>&1
     if ($lastexitcode -ne 0) {
-        abort "'$repo' doesn't look like a valid git repository`n`nError given:`n$out"
+        abort "'$repo' 并不是一个有效的Git仓库`n`nError given:`n$out"
     }
     write-host 'ok'
 
     ensure $bucketsdir > $null
     $dir = ensure $dir
     git_clone "$repo" "`"$dir`"" -q
-    success "The $name bucket was added successfully."
+    success "仓库 $name 成功添加到了Scoop."
 }
 
 function rm_bucket($name) {
-    if (!$name) { "<name> missing"; $usage_rm; exit 1 }
+    if (!$name) { "<name> 参数缺失"; $usage_rm; exit 1 }
     $dir = Find-BucketDirectory $name -Root
     if (!(test-path $dir)) {
-        abort "'$name' bucket not found."
+        abort "'$name' 仓库不存在."
     }
 
     Remove-Item $dir -r -force -ea stop
@@ -137,7 +137,7 @@ function new_issue_msg($app, $bucket, $title, $body) {
         Pop-Location
     }
 
-    if(!$url) { return 'Please contact the bucket maintainer!' }
+    if(!$url) { return '请联系仓库维护人员!' }
 
     # Print only github repositories
     if ($url -like '*github*') {
@@ -150,6 +150,6 @@ function new_issue_msg($app, $bucket, $title, $body) {
         }
     }
 
-    $msg = "`nPlease try again or create a new issue by using the following link and paste your console output:"
+    $msg = "`n请再次尝试或者在下列地址中添加issue，记得附上你的控制台输出:"
     return "$msg`n$url"
 }

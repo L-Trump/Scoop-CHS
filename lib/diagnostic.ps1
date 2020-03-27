@@ -15,10 +15,10 @@ function check_windows_defender($global) {
 
                 $exclusionPath = (Get-MpPreference).exclusionPath
                 if(!($exclusionPath -contains $installPath)) {
-                    warn "Windows Defender may slow down or disrupt installs with realtime scanning."
-                    write-host "  Consider running:"
+                    warn "Windows Defender 可能会降低安装速度甚至打断安装."
+                    write-host "  可以尝试运行:"
                     write-host "    sudo Add-MpPreference -ExclusionPath '$installPath'"
-                    write-host "  (Requires 'sudo' command. Run 'scoop install sudo' if you don't have it.)"
+                    write-host "  (需要 'sudo' 命令. 运行 'scoop install sudo' 来获取.)"
                     return $false
                 }
             }
@@ -29,8 +29,8 @@ function check_windows_defender($global) {
 
 function check_main_bucket {
     if ((Get-LocalBucket) -notcontains 'main'){
-        warn 'Main bucket is not added.'
-        Write-Host "  run 'scoop bucket add main'"
+        warn '主仓库未添加.'
+        Write-Host "运行 'scoop bucket add main'"
 
         return $false
     }
@@ -41,8 +41,8 @@ function check_main_bucket {
 function check_long_paths {
     $key = Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -ErrorAction SilentlyContinue -Name 'LongPathsEnabled'
     if (!$key -or ($key.LongPathsEnabled -eq 0)) {
-        warn 'LongPaths support is not enabled.'
-        Write-Host "You can enable it with running:"
+        warn '长目录支持未启用.'
+        Write-Host "你可以运行下面的命令来启用:"
         Write-Host "    Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -Value 1"
 
         return $false
@@ -53,8 +53,8 @@ function check_long_paths {
 
 function check_envs_requirements {
     if ($null -eq $env:COMSPEC) {
-        warn '$env:COMSPEC environment variable is missing.'
-        Write-Host "    By default the variable should points to the cmd.exe in Windows: '%SystemRoot%\system32\cmd.exe'."
+        warn '$env:COMSPEC 环境变量未找到.'
+        Write-Host "    在windows中环境变量通常指向 cmd.exe: '%SystemRoot%\system32\cmd.exe'."
 
         return $false
     }

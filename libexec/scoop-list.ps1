@@ -1,6 +1,6 @@
-# Usage: scoop list [query]
-# Summary: List installed apps
-# Help: Lists all installed apps, or the apps matching the supplied query.
+# Usage: scoop list [匹配值]
+# Summary: 列出已安装应用
+# Help: 列出所有已安装应用，或者与匹配值匹配的应用
 param($query)
 
 . "$psscriptroot\..\lib\core.ps1"
@@ -17,7 +17,7 @@ $global = installed_apps $true | ForEach-Object { @{ name = $_; global = $true }
 $apps = @($local) + @($global)
 
 if($apps) {
-    write-host "Installed apps$(if($query) { `" matching '$query'`"}): `n"
+    write-host "$(if($query) { `"匹配 '$query' 的`"})已安装应用: `n"
     $apps | Sort-Object { $_.name } | Where-Object { !$query -or ($_.name -match $query) } | ForEach-Object {
         $app = $_.name
         $global = $_.global
@@ -27,10 +27,10 @@ if($apps) {
         write-host "  $app " -NoNewline
         write-host -f DarkCyan $ver -NoNewline
 
-        if($global) { write-host -f DarkGreen ' *global*' -NoNewline }
+        if($global) { write-host -f DarkGreen ' *全局*' -NoNewline }
 
-        if (!$install_info) { Write-Host ' *failed*' -ForegroundColor DarkRed -NoNewline }
-        if ($install_info.hold) { Write-Host ' *hold*' -ForegroundColor DarkMagenta -NoNewline }
+        if (!$install_info) { Write-Host ' *安装失败*' -ForegroundColor DarkRed -NoNewline }
+        if ($install_info.hold) { Write-Host ' *已锁定*' -ForegroundColor DarkMagenta -NoNewline }
 
         if ($install_info.bucket) {
             write-host -f Yellow " [$($install_info.bucket)]" -NoNewline
@@ -46,6 +46,6 @@ if($apps) {
     write-host ''
     exit 0
 } else {
-    write-host "There aren't any apps installed."
+    write-host "你还没有安装应用哦."
     exit 1
 }

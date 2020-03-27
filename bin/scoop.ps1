@@ -12,8 +12,8 @@ reset_aliases
 
 # TODO: remove this in a few weeks
 if ((Get-LocalBucket) -notcontains 'main') {
-    warn "The main bucket of Scoop has been separated to 'https://github.com/ScoopInstaller/Main'"
-    warn "You don't have the main bucket added, adding main bucket for you..."
+    warn "Scoop主仓库已分离至 'https://github.com/ScoopInstaller/Main'"
+    warn "你的Scoop中并不含有主仓库，为您自动添加中..."
     add_bucket 'main'
     exit
 }
@@ -38,4 +38,4 @@ if ('--version' -contains $cmd -or (!$cmd -and '-v' -contains $args)) {
 }
 elseif (@($null, '--help', '/?') -contains $cmd -or $args[0] -contains '-h') { exec 'help' $args }
 elseif ($commands -contains $cmd) { exec $cmd $args }
-else { "scoop: '$cmd' isn't a scoop command. See 'scoop help'."; exit 1 }
+else { "scoop: '$cmd' 不是一个Scoop命令. 查看帮助: 'scoop help'."; exit 1 }

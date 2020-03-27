@@ -1,5 +1,5 @@
-# Usage: scoop prefix <app>
-# Summary: Returns the path to the specified app
+# Usage: scoop prefix <应用名>
+# Summary: 返回应用的主目录
 param($app)
 
 . "$psscriptroot\..\lib\core.ps1"
@@ -19,7 +19,7 @@ if(!(Test-Path $app_path)) {
 if(Test-Path $app_path) {
     Write-Output $app_path
 } else {
-    abort "Could not find app path for '$app'."
+    abort "未找到 '$app' 的路径."
 }
 
 exit 0

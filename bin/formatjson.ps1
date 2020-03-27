@@ -19,7 +19,7 @@ param(
     [Parameter(Mandatory = $true)]
     [ValidateScript( {
         if (!(Test-Path $_ -Type Container)) {
-            throw "$_ is not a directory!"
+            throw "$_ 不是一个目录!"
         } else {
             $true
         }

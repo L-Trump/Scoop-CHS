@@ -260,6 +260,12 @@
                         },
                         "useragent": {
                             "type": "string"
+                        },
+                        "encode": {
+                            "type": "string"
+                        },
+                        "cookie": {
+                            "type": "string"
                         }
                     },
                     "type": "object"

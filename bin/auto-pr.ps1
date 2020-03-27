@@ -32,7 +32,7 @@ param(
     [Parameter(Mandatory = $true)]
     [ValidateScript( {
         if (!($_ -match '^(.*)\/(.*):(.*)$')) {
-            throw 'Upstream must be in this format: <user>/<repo>:<branch>'
+            throw 'Upstream 格式如下: <user>/<repo>:<branch>'
         }
         $true
     })]
@@ -41,7 +41,7 @@ param(
     [Parameter(Mandatory = $true)]
     [ValidateScript( {
         if (!(Test-Path $_ -Type Container)) {
-            throw "$_ is not a directory!"
+            throw "$_ 不是一个目录!"
         } else {
             $true
         }
@@ -65,12 +65,12 @@ if ((!$Push -and !$Request) -or $Help) {
 Usage: auto-pr.ps1 [OPTION]
 
 Mandatory options:
-  -p,  -push                       push updates directly to 'origin master'
-  -r,  -request                    create pull-requests on 'upstream master' for each update
+  -p,  -push                       直接对 'origin master' 执行push操作
+  -r,  -request                    对 'upstream master' 创建pull-request请求
 
 Optional options:
-  -u,  -upstream                   upstream repository with target branch
-                                   only used if -r is set (default: lukesampson/scoop:master)
+  -u,  -upstream                   设定upstream仓库位置和分支
+                                   只有在-r设定时生效 (默认: lukesampson/scoop:master)
   -h,  -help
 '@
     exit 0
@@ -78,12 +78,12 @@ Optional options:
 
 if (is_unix) {
     if (!(which hub)) {
-        Write-Host "Please install hub ('brew install hub' or visit: https://hub.github.com/)" -ForegroundColor Yellow
+        Write-Host "请安装 hub ('brew install hub' 或访问: https://hub.github.com/)" -ForegroundColor Yellow
         exit 1
     }
 } else {
     if (!(scoop which hub)) {
-        Write-Host "Please install hub 'scoop install hub'" -ForegroundColor Yellow
+        Write-Host "请安装 hub: 'scoop install hub'" -ForegroundColor Yellow
         exit 1
     }
 }
@@ -131,10 +131,10 @@ function pull_requests($json, [String] $app, [String] $upstream, [String] $manif
     Write-Host "hub pull-request -m '<msg>' -b '$upstream' -h '$branch'" -ForegroundColor Green
 
     $msg = @"
-$app`: Update to version $version
+$app`: 版本更新至 $version
 
-Hello lovely humans,
-a new version of [$app]($homepage) is available.
+哦可爱的人类(???),
+[$app]($homepage) 有了可用更新.
 
 | State       | Update :rocket: |
 | :---------- | :-------------- |
@@ -144,11 +144,11 @@ a new version of [$app]($homepage) is available.
     hub pull-request -m "$msg" -b '$upstream' -h '$branch'
     if ($LASTEXITCODE -gt 0) {
         execute 'hub reset'
-        abort "Pull Request failed! (hub pull-request -m '${app}: Update to version $version' -b '$upstream' -h '$branch')"
+        abort "Pull Request 创建失败! (hub pull-request -m '${app}: Update to version $version' -b '$upstream' -h '$branch')"
     }
 }
 
-Write-Host 'Updating ...' -ForegroundColor DarkCyan
+Write-Host '更新中 ...' -ForegroundColor DarkCyan
 if ($Push) {
     execute 'hub pull origin master'
     execute 'hub checkout master'
@@ -174,13 +174,13 @@ hub diff --name-only | ForEach-Object {
     $app = ([System.IO.Path]::GetFileNameWithoutExtension($manifest))
     $json = parse_json $manifest
     if (!$json.version) {
-        error "Invalid manifest: $manifest ..."
+        error "Mainfest格式错误: $manifest ..."
         return
     }
     $version = $json.version
 
     if ($Push) {
-        Write-Host "Creating update $app ($version) ..." -ForegroundColor DarkCyan
+        Write-Host "更新 $app ($version) ..." -ForegroundColor DarkCyan
         execute "hub add $manifest"
 
         # detect if file was staged, because it's not when only LF or CRLF have changed
@@ -189,7 +189,7 @@ hub diff --name-only | ForEach-Object {
         if ($status -and $status.StartsWith('M  ') -and $status.EndsWith("$app.json")) {
             execute "hub commit -m '${app}: Update to version $version'"
         } else {
-            Write-Host "Skipping $app because only LF/CRLF changes were detected ..." -ForegroundColor Yellow
+            Write-Host "跳过 $app 因为其中只发现了LF/CRLF更改 ..." -ForegroundColor Yellow
         }
     } else {
         pull_requests $json $app $Upstream $manifest

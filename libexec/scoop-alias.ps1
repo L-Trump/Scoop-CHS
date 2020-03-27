@@ -1,19 +1,18 @@
-# Usage: scoop alias add|list|rm [<args>]
-# Summary: Manage scoop aliases
-# Help: Add, remove or list Scoop aliases
+# Usage: scoop alias add|list|rm [<参数>]
+# Summary: 管理Scoop别名
+# Help: 添加, 移除 或者列举 Scoop 别名
 #
-# Aliases are custom Scoop subcommands that can be created to make common tasks
-# easier.
+# 别名是自定义的Scoop子命令，可以创建这些子命令来执行常见任务
 #
-# To add an Alias:
-#     scoop alias add <name> <command> <description>
+# 添加别名:
+#     scoop alias add <别名> <命令> <描述>
 #
 # e.g.:
-#     scoop alias add rm 'scoop uninstall $args[0]' 'Uninstalls an app'
-#     scoop alias add upgrade 'scoop update *' 'Updates all apps, just like brew or apt'
+#     scoop alias add rm 'scoop uninstall $args[0]' '卸载应用'
+#     scoop alias add upgrade 'scoop update *' '更新全部应用'
 #
 # Options:
-#   -v, --verbose   Show alias description and table headers (works only for 'list')
+#   -v, --verbose   列出别名的描述以及表头 (只对 'list' 生效)
 
 param(
   [String]$opt,
@@ -40,13 +39,13 @@ function init_alias_config {
 
 function add_alias($name, $command) {
     if(!$command) {
-        abort "Can't create an empty alias."
+        abort "无法创造空的 alias."
     }
 
     # get current aliases from config
     $aliases = init_alias_config
     if($aliases.$name) {
-        abort "Alias $name already exists."
+        abort "Alias $name 已存在."
     }
 
     $alias_file = "scoop-$name"
@@ -69,18 +68,18 @@ $command
 function rm_alias($name) {
     $aliases = init_alias_config
     if(!$name) {
-        abort "Which alias should be removed?"
+        abort "你到底想要移除哪个Alias?"
     }
 
     if($aliases.$name) {
-        "Removing alias $name..."
+        "移除 alias $name..."
 
         rm_shim $aliases.$name (shimdir $false)
 
         $aliases.PSObject.Properties.Remove($name)
         set_config $script:config_alias $aliases | Out-Null
     } else {
-        abort "Alias $name doesn't exist."
+        abort "Alias $name 不存在."
     }
 }
 
@@ -96,7 +95,7 @@ function list_aliases {
     }
 
     if(!$aliases.count) {
-        warn "No aliases founds."
+        warn "未找到Alias."
     }
     $aliases = $aliases.GetEnumerator() | Sort-Object Name
     if($verbose) {

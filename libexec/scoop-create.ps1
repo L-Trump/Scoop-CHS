@@ -1,6 +1,6 @@
 # Usage: scoop create <url>
-# Summary: Create a custom app manifest
-# Help: Create your own custom app manifest
+# Summary: 创建一个自定义应用
+# Help: 创建你的自定义应用Manifest
 param($url)
 
 function create_manifest($url) {
@@ -13,7 +13,7 @@ function create_manifest($url) {
         $url_parts = parse_url $url
     }
     catch {
-        abort "Error: $url is not a valid URL"
+        abort "错误: $url 不是一个可用的 URL"
     }
 
     $name = choose_item $url_parts "App name"
@@ -28,7 +28,7 @@ function create_manifest($url) {
 
     $manifest | convertto-json | out-file -filepath "$name.json" -encoding utf8
     $manifest_path = join-path $pwd "$name.json"
-    write-host "Created '$manifest_path'."
+    write-host "成功创建 '$manifest_path'."
 }
 
 function new_manifest() {

@@ -1,17 +1,17 @@
-# Usage: scoop update <app> [options]
-# Summary: Update apps, or Scoop itself
-# Help: 'scoop update' updates Scoop to the latest version.
-# 'scoop update <app>' installs a new version of that app, if there is one.
+# Usage: scoop update <应用名> [选项]
+# Summary: 更新应用或者Scoop
+# Help: 'scoop update' 用来更新Scoop和仓库到最新版本.
+# 'scoop update <app>' 用来更新应用到最新版本.
 #
-# You can use '*' in place of <app> to update all apps.
+# 你可以使用'scoop update *'来更新全部应用
 #
 # Options:
-#   -f, --force               Force update even when there isn't a newer version
-#   -g, --global              Update a globally installed app
-#   -i, --independent         Don't install dependencies automatically
-#   -k, --no-cache            Don't use the download cache
-#   -s, --skip                Skip hash validation (use with caution!)
-#   -q, --quiet               Hide extraneous messages
+#   -f, --force               强制更新，即便不存在更新的版本
+#   -g, --global              更新一个全局应用
+#   -i, --independent         不自动安装依赖
+#   -k, --no-cache            不使用下载缓存
+#   -s, --skip                跳过Hash数据校验（谨慎使用）
+#   -q, --quiet               隐藏无关信息
 
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\shortcuts.ps1"
@@ -54,21 +54,21 @@ if(($PSVersionTable.PSVersion.Major) -lt 5) {
     # check powershell version
     # should be deleted after Oct 1, 2019
     If ((Get-Date).ToUniversalTime() -ge "2019-10-01") {
-        Write-Output "PowerShell 5 or later is required to run Scoop."
-        Write-Output "Upgrade PowerShell: https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell"
+        Write-Output "需要 Powershell 5 以及上来运行Scoop."
+        Write-Output "更新 PowerShell: https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell"
         break
     } else {
-        Write-Output "Scoop is going to stop supporting old version of PowerShell."
-        Write-Output "Please upgrade to PowerShell 5 or later version before Oct 1, 2019 UTC."
-        Write-Output "Guideline: https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell"
+        Write-Output "Scoop将停止对Powershell 3的支持."
+        Write-Output "请更新到Powershell 5或者更新版本."
+        Write-Output "更新帮助: https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell"
     }
 }
 
 function update_scoop() {
     # check for git
-    if(!(Test-CommandAvailable git)) { abort "Scoop uses Git to update itself. Run 'scoop install git' and try again." }
+    if(!(Test-CommandAvailable git)) { abort "Scoop需要使用Git来更新. 请执行 'scoop install git' 并再次尝试." }
 
-    write-host "Updating Scoop..."
+    write-host "正在更新 Scoop..."
     $last_update = $(last_scoop_update)
     if ($null -eq $last_update) {$last_update = [System.DateTime]::Now}
     $last_update = $last_update.ToString('s')
@@ -82,7 +82,7 @@ function update_scoop() {
 
         # check if scoop was successful downloaded
         if (!(test-path "$newdir")) {
-            abort 'Scoop update failed.'
+            abort 'Scoop 更新失败.'
         }
 
         # replace non-git scoop with the git version
@@ -124,13 +124,13 @@ function update_scoop() {
 
         Pop-Location
         if ($res -ne 0) {
-            abort 'Update failed.'
+            abort '更新失败.'
         }
     }
 
     if ((Get-LocalBucket) -notcontains 'main') {
-        info "The main bucket of Scoop has been separated to 'https://github.com/ScoopInstaller/Main'"
-        info "Adding main bucket..."
+        info "新版本Scoop的Main仓库已移至 'https://github.com/ScoopInstaller/Main'"
+        info "添加主仓库..."
         add_bucket 'main'
     }
 
@@ -138,7 +138,7 @@ function update_scoop() {
     shim "$currentdir\bin\scoop.ps1" $false
 
     Get-LocalBucket | ForEach-Object {
-        write-host "Updating '$_' bucket..."
+        write-host "更新 '$_' bucket..."
 
         $loc = Find-BucketDirectory $_ -Root
         # Make sure main bucket, which was downloaded as zip, will be properly "converted" into git
@@ -157,7 +157,7 @@ function update_scoop() {
     }
 
     set_config lastupdate ([System.DateTime]::Now.ToString('o')) | Out-Null
-    success 'Scoop was updated successfully!'
+    success 'Scoop 更新成功!'
 }
 
 function update($app, $global, $quiet = $false, $independent, $suggested, $use_cache = $true, $check_hash = $true) {
@@ -189,24 +189,24 @@ function update($app, $global, $quiet = $false, $independent, $suggested, $use_c
 
     if (!$force -and ($old_version -eq $version)) {
         if (!$quiet) {
-            warn "The latest version of '$app' ($version) is already installed."
+            warn "最新版本的 '$app' ($version) 已安装."
         }
         return
     }
     if (!$version) {
         # installed from a custom bucket/no longer supported
-        error "No manifest available for '$app'."
+        error "未找到 '$app' 的Manifest."
         return
     }
 
     $manifest = manifest $app $bucket $url
 
-    write-host "Updating '$app' ($old_version -> $version)"
+    write-host "更新 '$app' ($old_version -> $version)"
 
     # region Workaround
     # Workaround for https://github.com/lukesampson/scoop/issues/2220 until install is refactored
     # Remove and replace whole region after proper fix
-    Write-Host "Downloading new version"
+    Write-Host "正在下载新版本"
     if (Test-Aria2Enabled) {
         dl_with_cache_aria2 $app $version $manifest $architecture $cachedir $manifest.cookie $true $check_hash
     } else {
@@ -227,9 +227,9 @@ function update($app, $global, $quiet = $false, $independent, $suggested, $use_c
                         Remove-Item -force $source
                     }
                     if ($url.Contains('sourceforge.net')) {
-                        Write-Host -f yellow 'SourceForge.net is known for causing hash validation fails. Please try again before opening a ticket.'
+                        Write-Host -f yellow '已知SourceForge.net会导致哈希校验失败. 请再次尝试.'
                     }
-                    abort $(new_issue_msg $app $bucket "hash check failed")
+                    abort $(new_issue_msg $app $bucket "Hash校验失败")
                 }
             }
         }
@@ -244,12 +244,12 @@ function update($app, $global, $quiet = $false, $independent, $suggested, $use_c
     #region Workaround for #2952
     $processdir = appdir $app $global | Resolve-Path | Select-Object -ExpandProperty Path
     if (Get-Process | Where-Object { $_.Path -like "$processdir\*" }) {
-        error "Application is still running. Close all instances and try again."
+        error "应用正在运行，请关闭所有相关进程后再试."
         return
     }
     #endregion Workaround for #2952
 
-    write-host "Uninstalling '$app' ($old_version)"
+    write-host "正在卸载 '$app' ($old_version)"
     run_uninstaller $old_manifest $architecture $dir
     rm_shims $old_manifest $global $architecture
     env_rm_path $old_manifest $dir $global
@@ -285,15 +285,15 @@ function update($app, $global, $quiet = $false, $independent, $suggested, $use_c
 
 if (!$apps) {
     if ($global) {
-        "scoop update: --global is invalid when <app> is not specified."; exit 1
+        "scoop update: --global 选项在未指定应用时不可用."; exit 1
     }
     if (!$use_cache) {
-        "scoop update: --no-cache is invalid when <app> is not specified."; exit 1
+        "scoop update: --no-cache 选项在未指定应用时不可用."; exit 1
     }
     update_scoop
 } else {
     if ($global -and !(is_admin)) {
-        'ERROR: You need admin rights to update global apps.'; exit 1
+        '错误: 需要管理员权限来更新全局应用.'; exit 1
     }
 
     if (is_scoop_outdated) {
@@ -319,7 +319,7 @@ if (!$apps) {
                     $outdated += applist $app $global
                     write-host -f yellow ("$app`: $($status.version) -> $($status.latest_version){0}" -f ('',' (global)')[$global])
                 } else {
-                    warn "'$app' is locked to version $($status.version)"
+                    warn "'$app' 被锁定在版本 $($status.version)"
                 }
             } elseif ($apps_param -ne '*') {
                 write-host -f green "$app`: $($status.version) (latest version)"
@@ -327,15 +327,15 @@ if (!$apps) {
         }
 
         if ($outdated -and (Test-Aria2Enabled)) {
-            warn "Scoop uses 'aria2c' for multi-connection downloads."
-            warn "Should it cause issues, run 'scoop config aria2-enabled false' to disable it."
+            warn "Scoop 使用'aria2c' 来进行多线程下载."
+            warn "如果这导致了一些问题, 执行 'scoop config aria2-enabled false' 来禁用它."
         }
         if ($outdated.Length -gt 1) {
-            write-host -f DarkCyan "Updating $($outdated.Length) outdated apps:"
+            write-host -f DarkCyan "正在更新 $($outdated.Length) 个过时的应用:"
         } elseif ($outdated.Length -eq 0) {
-            write-host -f Green "Latest versions for all apps are installed! For more information try 'scoop status'"
+            write-host -f Green "所有应用的最新版本已安装! 可以通过 'scoop status' 来获取更多信息"
         } else {
-            write-host -f DarkCyan "Updating one outdated app:"
+            write-host -f DarkCyan "正在更新一个过时的应用:"
         }
     }
 

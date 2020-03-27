@@ -4,7 +4,7 @@
 function nightly_version($date, $quiet = $false) {
     $date_str = $date.tostring("yyyyMMdd")
     if (!$quiet) {
-        warn "This is a nightly version. Downloaded files won't be verified."
+        warn "这是nightly版本，下载的文件不会进行数据校验."
     }
     "nightly-$date_str"
 }
@@ -14,13 +14,13 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
     $app, $manifest, $bucket, $url = Find-Manifest $app $bucket
 
     if(!$manifest) {
-        abort "Couldn't find manifest for '$app'$(if($url) { " at the URL $url" })."
+        abort "$(if($url) { "无法在URL $url 中找到 " }) '$app'."
     }
 
     $version = $manifest.version
-    if(!$version) { abort "Manifest doesn't specify a version." }
+    if(!$version) { abort "Manifest中未定义版本号." }
     if($version -match '[^\w\.\-\+_]') {
-        abort "Manifest version has unsupported character '$($matches[0])'."
+        abort "Manifest版本号中含有不支持的字符 '$($matches[0])'."
     }
 
     $is_nightly = $version -eq 'nightly'
@@ -30,11 +30,11 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
     }
 
     if(!(supports_architecture $manifest $architecture)) {
-        write-host -f DarkRed "'$app' doesn't support $architecture architecture!"
+        write-host -f DarkRed "'$app' 不支持 $architecture 版本!"
         return
     }
 
-    write-output "Installing '$app' ($version) [$architecture]"
+    write-output "安装 '$app' ($version) [$architecture]"
 
     $dir = ensure (versiondir $app $version $global)
     $original_dir = $dir # keep reference to real (not linked) directory
@@ -66,7 +66,7 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
         $suggested[$app] = $manifest.suggest
     }
 
-    success "'$app' ($version) was installed successfully!"
+    success "'$app' ($version) 成功安装!"
 
     show_notes $manifest $dir $original_dir $persist_dir
 }
@@ -110,7 +110,7 @@ function dl_with_cache($app, $version, $url, $to, $cookies = $null, $use_cache =
         ensure $cachedir | Out-Null
         do_dl $url "$cached.download" $cookies
         Move-Item "$cached.download" $cached -force
-    } else { write-host "Loading $(url_remote_filename $url) from cache"}
+    } else { write-host "从缓存中加载 $(url_remote_filename $url)"}
 
     if (!($null -eq $to)) {
         Copy-Item $cached $to
@@ -133,42 +133,42 @@ function do_dl($url, $to, $cookies) {
 
 function aria_exit_code($exitcode) {
     $codes = @{
-        0='All downloads were successful'
-        1='An unknown error occurred'
-        2='Timeout'
-        3='Resource was not found'
-        4='Aria2 saw the specified number of "resource not found" error. See --max-file-not-found option'
-        5='Download aborted because download speed was too slow. See --lowest-speed-limit option'
-        6='Network problem occurred.'
-        7='There were unfinished downloads. This error is only reported if all finished downloads were successful and there were unfinished downloads in a queue when aria2 exited by pressing Ctrl-C by an user or sending TERM or INT signal'
-        8='Remote server did not support resume when resume was required to complete download'
-        9='There was not enough disk space available'
-        10='Piece length was different from one in .aria2 control file. See --allow-piece-length-change option'
-        11='Aria2 was downloading same file at that moment'
-        12='Aria2 was downloading same info hash torrent at that moment'
-        13='File already existed. See --allow-overwrite option'
-        14='Renaming file failed. See --auto-file-renaming option'
-        15='Aria2 could not open existing file'
-        16='Aria2 could not create new file or truncate existing file'
-        17='File I/O error occurred'
-        18='Aria2 could not create directory'
-        19='Name resolution failed'
-        20='Aria2 could not parse Metalink document'
-        21='FTP command failed'
-        22='HTTP response header was bad or unexpected'
-        23='Too many redirects occurred'
-        24='HTTP authorization failed'
-        25='Aria2 could not parse bencoded file (usually ".torrent" file)'
-        26='".torrent" file was corrupted or missing information that aria2 needed'
-        27='Magnet URI was bad'
-        28='Bad/unrecognized option was given or unexpected option argument was given'
-        29='The remote server was unable to handle the request due to a temporary overloading or maintenance'
-        30='Aria2 could not parse JSON-RPC request'
+        0='下载完成'
+        1='未知错误'
+        2='连接超时'
+        3='资源不存在'
+        4='Aria2发现了指定数量的"资源不存在"错误. 详情查看 --max-file-not-found 配置项'
+        5='由于下载速度过慢，下载已停止. 详情查看 --lowest-speed-limit 配置项'
+        6='出现网络错误.'
+        7='存在未完成的下载. 只有当用户按Ctrl-C或发送TERM或INT信号退出aria2，所有完成的下载都成功并且队列中有未完成的下载时，才会报告此错误'
+        8='需要恢复下载进度，但远程服务器不支持'
+        9='硬盘空间不足'
+        10='分块长度与 .aria2 控制文件中设定的不同. 请查看 --allow-piece-length-change 配置项'
+        11='Aria2 正在下载相同的文件'
+        12='Aria2 正在下载Hash校验值相同的Torrent文件'
+        13='文件已存在. 请查看 --allow-overwrite 配置项'
+        14='重命名失败. 请查看 --auto-file-renaming 配置项'
+        15='Aria2 无法打开已存在的文件'
+        16='Aria2 无法创建新文件或者修改现有文件'
+        17='发生文件 I/O 错误'
+        18='Aria2 无法创建目录'
+        19='文件名解析失败'
+        20='Aria2 无法解析 Metalink 文档'
+        21='FTP 命令执行失败'
+        22='HTTP 的响应头部返回了错误信息'
+        23='存在太多的重定向'
+        24='HTTP 认证失败'
+        25='Aria2 无法解析 bencoded 文件 (通常是 ".torrent" 文件)'
+        26='".torrent" 文件缺少Aria2需要的信息'
+        27='磁力链接有误'
+        28='发现错误的配置或参数'
+        29='由于临时过载或维护，远程服务器无法处理该请求'
+        30='Aria2 无法解析 JSON-RPC 请求'
         31='Reserved. Not used'
-        32='Checksum validation failed'
+        32='文件校验失败'
     }
     if($null -eq $codes[$exitcode]) {
-        return 'An unknown error occurred'
+        return '发生未知错误'
     }
     return $codes[$exitcode]
 }
@@ -267,9 +267,8 @@ function dl_with_cache_aria2($app, $version, $manifest, $architecture, $dir, $co
             $urlstxt_content += "    dir=$cachedir`n"
             $urlstxt_content += "    out=$($data.$url.cachename)`n"
         } else {
-            Write-Host "Loading " -NoNewline
-            Write-Host $(url_remote_filename $url) -f Cyan -NoNewline
-            Write-Host " from cache."
+            Write-Host "从缓存中加载 " -NoNewline
+            Write-Host $(url_remote_filename $url) -f Cyan
         }
     }
 
@@ -281,7 +280,7 @@ function dl_with_cache_aria2($app, $version, $manifest, $architecture, $dir, $co
         $aria2 = "& '$(Get-HelperPath -Helper Aria2)' $($options -join ' ')"
 
         # handle aria2 console output
-        Write-Host "Starting download with aria2 ..."
+        Write-Host "开始使用Aria2下载..."
         $prefix = "Download: "
         Invoke-Expression $aria2 | ForEach-Object {
             if([String]::IsNullOrWhiteSpace($_)) {
@@ -299,10 +298,10 @@ function dl_with_cache_aria2($app, $version, $manifest, $architecture, $dir, $co
         }
 
         if($lastexitcode -gt 0) {
-            error "Download failed! (Error $lastexitcode) $(aria_exit_code $lastexitcode)"
+            error "下载失败! (Error $lastexitcode) $(aria_exit_code $lastexitcode)"
             error $urlstxt_content
             error $aria2
-            abort $(new_issue_msg $app $bucket "download via aria2 failed")
+            abort $(new_issue_msg $app $bucket "通过Aria2下载失败")
         }
 
         # remove aria2 input file when done
@@ -330,15 +329,15 @@ function dl_with_cache_aria2($app, $version, $manifest, $architecture, $dir, $co
                     Remove-Item -force $data.$url.source
                 }
                 if($url.Contains('sourceforge.net')) {
-                    Write-Host -f yellow 'SourceForge.net is known for causing hash validation fails. Please try again before opening a ticket.'
+                    Write-Host -f yellow '众所周知，SourceForge.net会导致哈希验证失败。建议你再试一次。'
                 }
-                abort $(new_issue_msg $app $bucket "hash check failed")
+                abort $(new_issue_msg $app $bucket "Hash校验失败")
             }
         }
 
         # copy or move file to target location
         if(!(test-path $data.$url.source) ) {
-            abort $(new_issue_msg $app $bucket "cached file not found")
+            abort $(new_issue_msg $app $bucket "未找到缓存")
         }
 
         if(!($dir -eq $cachedir)) {
@@ -377,7 +376,7 @@ function dl($url, $to, $cookies, $progress) {
             dl_progress $read $total $url
         }
     } else {
-        write-host "Downloading $url ($(filesize $total))..."
+        write-host "下载 $url ($(filesize $total))..."
         function dl_onProgress {
             #no op
         }
@@ -478,7 +477,7 @@ function dl_progress($read, $total, $url) {
 
 function dl_urls($app, $version, $manifest, $bucket, $architecture, $dir, $use_cache = $true, $check_hash = $true) {
     # we only want to show this warning once
-    if(!$use_cache) { warn "Cache is being ignored." }
+    if(!$use_cache) { warn "缓存将被忽略." }
 
     # can be multiple urls: if there are, then msi or installer should go last,
     # so that $fname is set properly
@@ -506,7 +505,7 @@ function dl_urls($app, $version, $manifest, $bucket, $architecture, $dir, $use_c
                 dl_with_cache $app $version $url "$dir\$fname" $cookies $use_cache
             } catch {
                 write-host -f darkred $_
-                abort "URL $url is not valid"
+                abort "地址 $url 无效"
             }
 
             if($check_hash) {
@@ -520,9 +519,9 @@ function dl_urls($app, $version, $manifest, $bucket, $architecture, $dir, $use_c
                         Remove-Item -force $cached
                     }
                     if($url.Contains('sourceforge.net')) {
-                        Write-Host -f yellow 'SourceForge.net is known for causing hash validation fails. Please try again before opening a ticket.'
+                        Write-Host -f yellow '众所周知，SourceForge.net会导致哈希验证失败。建议你再试一次。'
                     }
-                    abort $(new_issue_msg $app $bucket "hash check failed")
+                    abort $(new_issue_msg $app $bucket "Hash校验失败")
                 }
             }
         }
@@ -548,7 +547,7 @@ function dl_urls($app, $version, $manifest, $bucket, $architecture, $dir, $use_c
         } elseif($fname -match '\.msi$') {
             # check manifest doesn't use deprecated install method
             if(msi $manifest $architecture) {
-                warn "MSI install is deprecated. If you maintain this manifest, please refer to the manifest reference docs."
+                warn "不建议使用MSI安装, 如果您维护这个Manifest，请参阅参考文档."
             } else {
                 $extract_fn = 'Expand-MsiArchive'
             }
@@ -557,11 +556,11 @@ function dl_urls($app, $version, $manifest, $bucket, $architecture, $dir, $use_c
         }
 
         if($extract_fn) {
-            Write-Host "Extracting " -NoNewline
+            Write-Host "正在解压 " -NoNewline
             Write-Host $fname -f Cyan -NoNewline
             Write-Host " ... " -NoNewline
             & $extract_fn -Path "$dir\$fname" -DestinationPath "$dir\$extract_to" -ExtractDir $extract_dir -Removal
-            Write-Host "done." -f Green
+            Write-Host "完成" -f Green
             $extracted++
         }
     }
@@ -600,7 +599,7 @@ function hash_for_url($manifest, $url, $arch) {
     $urls = @(url $manifest $arch)
 
     $index = [array]::indexof($urls, $url)
-    if($index -eq -1) { abort "Couldn't find hash in manifest for '$url'." }
+    if($index -eq -1) { abort "无法在 '$url' 中找到Hash值" }
 
     @($hashes)[$index]
 }
@@ -609,31 +608,31 @@ function hash_for_url($manifest, $url, $arch) {
 function check_hash($file, $hash, $app_name) {
     $file = fullpath $file
     if(!$hash) {
-        warn "Warning: No hash in manifest. SHA256 for '$(fname $file)' is:`n    $(compute_hash $file 'sha256')"
+        warn "警告, Manifest中未指定Hash. '$(fname $file)' 的SHA256校验值为:`n    $(compute_hash $file 'sha256')"
         return $true, $null
     }
 
-    Write-Host "Checking hash of " -NoNewline
+    Write-Host "检查 " -NoNewline
     Write-Host $(url_remote_filename $url) -f Cyan -NoNewline
-    Write-Host " ... " -nonewline
+    Write-Host " 的Hash值... " -nonewline
     $algorithm, $expected = get_hash $hash
     if ($null -eq $algorithm) {
-        return $false, "Hash type '$algorithm' isn't supported."
+        return $false, "不支持Hash类型 '$algorithm'."
     }
 
     $actual = compute_hash $file $algorithm
     $expected = $expected.ToLower()
 
     if($actual -ne $expected) {
-        $msg = "Hash check failed!`n"
+        $msg = "Hash校验失败!`n"
         $msg += "App:         $app_name`n"
         $msg += "URL:         $url`n"
         if(Test-Path $file) {
             $msg += "First bytes: $((get_magic_bytes_pretty $file ' ').ToUpper())`n"
         }
         if($expected -or $actual) {
-            $msg += "Expected:    $expected`n"
-            $msg += "Actual:      $actual"
+            $msg += "预期Hash值:    $expected`n"
+            $msg += "实际Hash值:    $actual"
         }
         return $false, $msg
     }
@@ -671,7 +670,7 @@ function run_installer($fname, $manifest, $architecture, $dir, $global) {
     $msi = msi $manifest $architecture
     $installer = installer $manifest $architecture
     if($installer.script) {
-        write-output "Running installer script..."
+        write-output "运行安装脚本..."
         Invoke-Expression (@($installer.script) -join "`r`n")
         return
     }
@@ -687,10 +686,10 @@ function run_installer($fname, $manifest, $architecture, $dir, $global) {
 function install_msi($fname, $dir, $msi) {
     $msifile = "$dir\$(coalesce $msi.file "$fname")"
     if(!(is_in_dir $dir $msifile)) {
-        abort "Error in manifest: MSI file $msifile is outside the app directory."
+        abort "在Manifest中发现错误: MSI 文件 $msifile 在App目录之外."
     }
-    if(!($msi.code)) { abort "Error in manifest: Couldn't find MSI code."}
-    if(msi_installed $msi.code) { abort "The MSI package is already installed on this system." }
+    if(!($msi.code)) { abort "在Manifest中发现错误: 未找到 MSI code."}
+    if(msi_installed $msi.code) { abort "这个MSI安装包已经安装在当前系统中了." }
 
     $logfile = "$dir\install.log"
 
@@ -700,11 +699,11 @@ function install_msi($fname, $dir, $msi) {
     if($msi.silent) { $arg += '/qn', 'ALLUSERS=2', 'MSIINSTALLPERUSER=1' }
     else { $arg += '/qb-!' }
 
-    $continue_exit_codes = @{ 3010 = "a restart is required to complete installation" }
+    $continue_exit_codes = @{ 3010 = "需要重启来完成安装" }
 
     $installed = Invoke-ExternalCommand 'msiexec' $arg -Activity "Running installer..." -ContinueExitCodes $continue_exit_codes
     if(!$installed) {
-        abort "Installation aborted. You might need to run 'scoop uninstall $app' before trying again."
+        abort "安装中止. 也许你需要运行 'scoop uninstall $app' 后再尝试."
     }
     Remove-Item $logfile
     Remove-Item $msifile
@@ -727,7 +726,7 @@ function msi_installed($code) {
 function install_prog($fname, $dir, $installer, $global) {
     $prog = "$dir\$(coalesce $installer.file "$fname")"
     if(!(is_in_dir $dir $prog)) {
-        abort "Error in manifest: Installer $prog is outside the app directory."
+        abort "在Manifest中发现错误: 安装包 $prog 位于App目录之外."
     }
     $arg = @(args $installer.args $dir $global)
 
@@ -736,7 +735,7 @@ function install_prog($fname, $dir, $installer, $global) {
     } else {
         $installed = Invoke-ExternalCommand $prog $arg -Activity "Running installer..."
         if(!$installed) {
-            abort "Installation aborted. You might need to run 'scoop uninstall $app' before trying again."
+            abort "安装中止. 也许你需要运行 'scoop uninstall $app' 后再尝试."
         }
 
         # Don't remove installer if "keep" flag is set to true
@@ -751,7 +750,7 @@ function run_uninstaller($manifest, $architecture, $dir) {
     $uninstaller = uninstaller $manifest $architecture
     $version = $manifest.version
     if($uninstaller.script) {
-        write-output "Running uninstaller script..."
+        write-output "运行卸载脚本..."
         Invoke-Expression (@($uninstaller.script) -join "`r`n")
         return
     }
@@ -769,16 +768,16 @@ function run_uninstaller($manifest, $architecture, $dir) {
                 $arg += '/qb-!'
             }
 
-            $continue_exit_codes.1605 = 'not installed, skipping'
-            $continue_exit_codes.3010 = 'restart required'
+            $continue_exit_codes.1605 = '未安装, 已跳过'
+            $continue_exit_codes.3010 = '需要重启'
         } elseif($uninstaller) {
             $exe = "$dir\$($uninstaller.file)"
             $arg = args $uninstaller.args
             if(!(is_in_dir $dir $exe)) {
-                warn "Error in manifest: Installer $exe is outside the app directory, skipping."
+                warn "在Manifest中发现错误: 程序 $exe 位于App目录之外，已跳过."
                 $exe = $null;
             } elseif(!(test-path $exe)) {
-                warn "Uninstaller $exe is missing, skipping."
+                warn "未找到卸载程序 $exe, 已跳过."
                 $exe = $null;
             }
         }
@@ -787,8 +786,8 @@ function run_uninstaller($manifest, $architecture, $dir) {
             if($exe.endswith('.ps1')) {
                 & $exe @arg
             } else {
-                $uninstalled = Invoke-ExternalCommand $exe $arg -Activity "Running uninstaller..." -ContinueExitCodes $continue_exit_codes
-                if(!$uninstalled) { abort "Uninstallation aborted." }
+                $uninstalled = Invoke-ExternalCommand $exe $arg -Activity "运行卸载程序..." -ContinueExitCodes $continue_exit_codes
+                if(!$uninstalled) { abort "卸载中止." }
             }
         }
     }
@@ -804,7 +803,7 @@ function create_shims($manifest, $dir, $global, $arch) {
     $shims = @(arch_specific 'bin' $manifest $arch)
     $shims | Where-Object { $_ -ne $null } | ForEach-Object {
         $target, $name, $arg = shim_def $_
-        write-output "Creating shim for '$name'."
+        write-output "为 '$name' 创造 Shim."
 
         if(test-path "$dir\$target" -pathType leaf) {
             $bin = "$dir\$target"
@@ -813,7 +812,7 @@ function create_shims($manifest, $dir, $global, $arch) {
         } else {
             $bin = search_in_path $target
         }
-        if(!$bin) { abort "Can't shim '$target': File doesn't exist."}
+        if(!$bin) { abort "无法创造shim '$target': 文件不存在."}
 
         shim $bin $global $name (substitute $arg @{ '$dir' = $dir; '$original_dir' = $original_dir; '$persist_dir' = $persist_dir})
     }
@@ -823,9 +822,9 @@ function rm_shim($name, $shimdir) {
     $shim = "$shimdir\$name.ps1"
 
     if(!(test-path $shim)) { # handle no shim from failed install
-        warn "Shim for '$name' is missing. Skipping."
+        warn "'$name' 的shim不存在. 已跳过."
     } else {
-        write-output "Removing shim for '$name'."
+        write-output "移除 '$name' 的 Shim."
         Remove-Item $shim
     }
 
@@ -866,10 +865,10 @@ function link_current($versiondir) {
 
     $currentdir = current_dir $versiondir
 
-    write-host "Linking $(friendly_path $currentdir) => $(friendly_path $versiondir)"
+    write-host "链接 $(friendly_path $currentdir) => $(friendly_path $versiondir)"
 
     if($currentdir -eq $versiondir) {
-        abort "Error: Version 'current' is not allowed!"
+        abort "错误: 禁止使用版本号 'current'!"
     }
 
     if(test-path $currentdir) {
@@ -893,7 +892,7 @@ function unlink_current($versiondir) {
     $currentdir = current_dir $versiondir
 
     if(test-path $currentdir) {
-        write-host "Unlinking $(friendly_path $currentdir)"
+        write-host "取消链接 $(friendly_path $currentdir)"
 
         # remove read-only attribute on link
         attrib $currentdir -R /L
@@ -911,14 +910,14 @@ function ensure_install_dir_not_in_path($dir, $global) {
 
     $fixed, $removed = find_dir_or_subdir $path "$dir"
     if($removed) {
-        $removed | ForEach-Object { "Installer added '$(friendly_path $_)' to path. Removing."}
+        $removed | ForEach-Object { "安装程序添加了 '$(friendly_path $_)' 到路径中. 删除."}
         env 'path' $global $fixed
     }
 
     if(!$global) {
         $fixed, $removed = find_dir_or_subdir (env 'path' $true) "$dir"
         if($removed) {
-            $removed | ForEach-Object { warn "Installer added '$_' to system path. You might want to remove this manually (requires admin permission)."}
+            $removed | ForEach-Object { warn "安装程序添加了 '$_' 到系统目录. 你也许需要手动移除它（需要管理员权限）."}
         }
     }
 }
@@ -942,7 +941,7 @@ function env_add_path($manifest, $dir, $global, $arch) {
         $path_dir = Join-Path $dir $_
 
         if (!(is_in_dir $dir $path_dir)) {
-            abort "Error in manifest: env_add_path '$_' is outside the app directory."
+            abort "在Manifest中发现错误: 添加到环境变量的目录env_add_path '$_' 位于App目录之外."
         }
         add_first_in_path $path_dir $global
     }
@@ -982,7 +981,7 @@ function env_rm($manifest, $global, $arch) {
 function pre_install($manifest, $arch) {
     $pre_install = arch_specific 'pre_install' $manifest $arch
     if($pre_install) {
-        write-output "Running pre-install script..."
+        write-output "运行安装前脚本 pre_install..."
         Invoke-Expression (@($pre_install) -join "`r`n")
     }
 }
@@ -990,7 +989,7 @@ function pre_install($manifest, $arch) {
 function post_install($manifest, $arch) {
     $post_install = arch_specific 'post_install' $manifest $arch
     if($post_install) {
-        write-output "Running post-install script..."
+        write-output "运行安装后脚本 post_install..."
         Invoke-Expression (@($post_install) -join "`r`n")
     }
 }
@@ -1031,7 +1030,7 @@ function failed($app, $global) {
 function ensure_none_failed($apps, $global) {
     foreach($app in $apps) {
         if(failed $app $global) {
-            abort "'$app' install failed previously. Please uninstall it and try again."
+            abort "'$app' 之前曾安装失败. 请先卸载它再尝试 ('scoop uninstall $app')."
         }
     }
 }
@@ -1055,7 +1054,7 @@ function show_suggestions($suggested) {
             }
 
             if(!$fulfilled) {
-                write-host "'$app' suggests installing '$([string]::join("' or '", $feature_suggestions))'."
+                write-host "'$app' 建议你安装 '$([string]::join("' or '", $feature_suggestions))'."
             }
         }
     }

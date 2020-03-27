@@ -1,5 +1,5 @@
-# Usage: scoop help <command>
-# Summary: Show help for a command
+# Usage: scoop help <命令>
+# Summary: 查看某个命令的和帮助
 param($cmd)
 
 . "$psscriptroot\..\lib\core.ps1"
@@ -35,15 +35,15 @@ function print_summaries {
 $commands = commands
 
 if(!($cmd)) {
-    "Usage: scoop <command> [<args>]
+    "使用方法: scoop <命令> [<参数>]
 
-Some useful commands are:"
+这里是一些常用命令:"
     print_summaries
-    "Type 'scoop help <command>' to get help for a specific command."
+    "执行 'scoop help <命令>' 来获取某项命令的帮助."
 } elseif($commands -contains $cmd) {
     print_help $cmd
 } else {
-    "scoop help: no such command '$cmd'"; exit 1
+    "scoop help: 不存在命令 '$cmd'"; exit 1
 }
 
 exit 0

@@ -43,7 +43,7 @@ function load_cfg($file) {
     try {
         return (Get-Content $file -Raw | ConvertFrom-Json -ErrorAction Stop)
     } catch {
-        Write-Host "ERROR loading $file`: $($_.exception.message)"
+        Write-Host "文件加载错误 $file`: $($_.exception.message)"
     }
 }
 
@@ -103,7 +103,7 @@ function setup_proxy() {
             [net.webrequest]::defaultwebproxy.credentials = new-object net.networkcredential($username, $password)
         }
     } catch {
-        warn "Failed to use proxy '$proxy': $($_.exception.message)"
+        warn "使用代理失败 '$proxy': $($_.exception.message)"
     }
 }
 
@@ -122,9 +122,9 @@ function is_admin {
 
 # messages
 function abort($msg, [int] $exit_code=1) { write-host $msg -f red; exit $exit_code }
-function error($msg) { write-host "ERROR $msg" -f darkred }
-function warn($msg) {  write-host "WARN  $msg" -f darkyellow }
-function info($msg) {  write-host "INFO  $msg" -f darkgray }
+function error($msg) { write-host "错误 $msg" -f darkred }
+function warn($msg) {  write-host "警告  $msg" -f darkyellow }
+function info($msg) {  write-host "提示  $msg" -f darkgray }
 function debug($obj) {
     if((get_config 'debug' $false) -ine 'true' -and $env:SCOOP_DEBUG -ine 'true') {
         return
@@ -423,7 +423,7 @@ function Invoke-ExternalCommand {
         $Process.Start() | Out-Null
     } catch {
         if ($Activity) {
-            Write-Host "error." -ForegroundColor DarkRed
+            Write-Host "错误." -ForegroundColor DarkRed
         }
         error $_.Exception.Message
         return $false
@@ -435,20 +435,20 @@ function Invoke-ExternalCommand {
     if ($Process.ExitCode -ne 0) {
         if ($ContinueExitCodes -and ($ContinueExitCodes.ContainsKey($Process.ExitCode))) {
             if ($Activity) {
-                Write-Host "done." -ForegroundColor DarkYellow
+                Write-Host "完成." -ForegroundColor DarkYellow
             }
             warn $ContinueExitCodes[$Process.ExitCode]
             return $true
         } else {
             if ($Activity) {
-                Write-Host "error." -ForegroundColor DarkRed
+                Write-Host "错误." -ForegroundColor DarkRed
             }
             error "Exit code was $($Process.ExitCode)!"
             return $false
         }
     }
     if ($Activity) {
-        Write-Host "done." -ForegroundColor Green
+        Write-Host "完成." -ForegroundColor Green
     }
     return $true
 }
@@ -507,7 +507,7 @@ function movedir($from, $to) {
 
     if($proc.ExitCode -ge 8) {
         debug $out
-        throw "Could not find '$(fname $from)'! (error $($proc.ExitCode))"
+        throw "无法找到 '$(fname $from)'! (error $($proc.ExitCode))"
     }
 
     # wait for robocopy to terminate its threads
@@ -543,11 +543,11 @@ function warn_on_overwrite($shim_ps1, $path) {
         return
     }
     $filename = [System.IO.Path]::GetFileName($path)
-    warn "Overwriting shim to $filename installed from $shim_app"
+    warn "覆盖 $shim_app 创建的Shim $filename"
 }
 
 function shim($path, $global, $name, $arg) {
-    if(!(test-path $path)) { abort "Can't shim '$(fname $path)': couldn't find '$path'." }
+    if(!(test-path $path)) { abort "无法创建Shim '$(fname $path)': 未找到 '$path'." }
     $abs_shimdir = ensure (shimdir $global)
     if(!$name) { $name = strip_ext (fname $path) }
 
@@ -621,7 +621,7 @@ function ensure_in_path($dir, $global) {
     $path = env 'PATH' $global
     $dir = fullpath $dir
     if($path -notmatch [regex]::escape($dir)) {
-        write-output "Adding $(friendly_path $dir) to $(if($global){'global'}else{'your'}) path."
+        write-output "添加$(friendly_path $dir)到$(if($global){'全局'}else{'用户'})目录."
 
         env 'PATH' $global "$dir;$path" # for future sessions...
         $env:PATH = "$dir;$env:PATH" # for this session
@@ -656,19 +656,19 @@ function Confirm-InstallationStatus {
             if (installed $App $true) {
                 $Installed += ,@($App, $true)
             } elseif (installed $App $false) {
-                error "'$App' isn't installed globally, but it is installed for your account."
-                warn "Try again without the --global (or -g) flag instead."
+                error "'$App' 未能全局安装, 但它已经安装到了用户目录下."
+                warn "尝试不使用 --global (or -g)."
             } else {
-                error "'$App' isn't installed."
+                error "'$App' 未安装."
             }
         } else {
             if(installed $App $false) {
                 $Installed += ,@($App, $false)
             } elseif (installed $App $true) {
-                error "'$App' isn't installed for your account, but it is installed globally."
-                warn "Try again with the --global (or -g) flag instead."
+                error "'$App' 未能安装到用户目录，但已进行全局安装."
+                warn "尝试使用 --global (or -g) 开关."
             } else {
-                error "'$App' isn't installed."
+                error "'$App' 未安装."
             }
         }
     }
@@ -699,7 +699,7 @@ function remove_from_path($dir, $global) {
     # future sessions
     $was_in_path, $newpath = strip_path (env 'path' $global) $dir
     if($was_in_path) {
-        Write-Output "Removing $(friendly_path $dir) from your path."
+        Write-Output "从用户目录中移除 $(friendly_path $dir)."
         env 'path' $global $newpath
     }
 
@@ -744,7 +744,7 @@ function pluralize($count, $singular, $plural) {
 function reset_alias($name, $value) {
     if($existing = get-alias $name -ea ignore | Where-Object { $_.options -match 'readonly' }) {
         if($existing.definition -ne $value) {
-            write-host "Alias $name is read-only; can't reset it." -f darkyellow
+            write-host "别名 $name 只读; 无法对其进行重置." -f darkyellow
         }
         return # already set
     }

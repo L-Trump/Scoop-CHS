@@ -17,7 +17,7 @@ function url_manifest($url) {
         $wc.Headers.Add('User-Agent', (Get-UserAgent))
         $str = $wc.downloadstring($url)
     } catch [system.management.automation.methodinvocationexception] {
-        warn "error: $($_.exception.innerexception.message)"
+        warn "错误: $($_.exception.innerexception.message)"
     } catch {
         throw
     }
@@ -67,7 +67,7 @@ function default_architecture {
         try {
             $arch = ensure_architecture $arch
         } catch {
-            warn 'Invalid default architecture configured. Determining default system architecture'
+            warn '默认架构配置不可用. 正在获取系统架构'
             $arch = $system
         }
     }
@@ -93,11 +93,11 @@ function generate_user_manifest($app, $bucket, $version) {
     if ("$($manifest.version)" -eq "$version") {
         return manifest_path $app $bucket
     }
-    warn "Given version ($version) does not match manifest ($($manifest.version))"
-    warn "Attempting to generate manifest for '$app' ($version)"
+    warn "得到的版本号 ($version) 与Manifest中的版本号 ($($manifest.version)) 不同"
+    warn "尝试为 '$app' ($version) 生成Manifest"
 
     if (!($manifest.autoupdate)) {
-        abort "'$app' does not have autoupdate capability`r`ncouldn't find manifest for '$app@$version'"
+        abort "'$app' 无自动更新功能`r`n无法在 '$app@$version' 的Manifest中找到相关配置"
     }
 
     ensure $(usermanifestsdir) | out-null
@@ -105,7 +105,7 @@ function generate_user_manifest($app, $bucket, $version) {
         autoupdate $app "$(resolve-path $(usermanifestsdir))" $manifest $version $(@{})
         return "$(resolve-path $(usermanifest $app))"
     } catch {
-        write-host -f darkred "Could not install $app@$version"
+        write-host -f darkred "无法安装 $app@$version"
     }
 
     return $null

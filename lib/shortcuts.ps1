@@ -29,11 +29,11 @@ function shortcut_folder($global) {
 
 function startmenu_shortcut([System.IO.FileInfo] $target, $shortcutName, $arguments, [System.IO.FileInfo]$icon, $global) {
     if(!$target.Exists) {
-        Write-Host -f DarkRed "Creating shortcut for $shortcutName ($(fname $target)) failed: Couldn't find $target"
+        Write-Host -f DarkRed "创建快捷方式 $shortcutName ($(fname $target)) 失败: 无法找到 $target"
         return
     }
     if($icon -and !$icon.Exists) {
-        Write-Host -f DarkRed "Creating shortcut for $shortcutName ($(fname $target)) failed: Couldn't find icon $icon"
+        Write-Host -f DarkRed "创建快捷方式 $shortcutName ($(fname $target)) 失败: 无法找到图标icon $icon"
         return
     }
 
@@ -54,7 +54,7 @@ function startmenu_shortcut([System.IO.FileInfo] $target, $shortcutName, $argume
         $wsShell.IconLocation = $icon.FullName
     }
     $wsShell.Save()
-    write-host "Creating shortcut for $shortcutName ($(fname $target))"
+    write-host "创建快捷方式： $shortcutName ($(fname $target))"
 }
 
 # Removes the Startmenu shortcut if it exists
@@ -63,7 +63,7 @@ function rm_startmenu_shortcuts($manifest, $global, $arch) {
     $shortcuts | Where-Object { $_ -ne $null } | ForEach-Object {
         $name = $_.item(1)
         $shortcut = "$(shortcut_folder $global)\$name.lnk"
-        write-host "Removing shortcut $(friendly_path $shortcut)"
+        write-host "移除快捷方式 $(friendly_path $shortcut)"
         if(Test-Path -Path $shortcut) {
              Remove-Item $shortcut
         }

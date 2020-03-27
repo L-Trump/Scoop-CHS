@@ -1,9 +1,10 @@
-# Usage: scoop search <query>
-# Summary: Search available apps
-# Help: Searches for apps that are available to install.
+# Usage: scoop search <匹配值>
+# Summary: 搜索可用的应用
+# Help:在仓库中搜索可用的应用
 #
-# If used with [query], shows app names that match the query.
-# Without [query], shows all the available apps.
+# 匹配值可以为正则表达式
+# 如果设定了匹配值，将搜索可以匹配的应用
+# 否则将列出所有可用的应用
 param($query)
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\buckets.ps1"
@@ -33,7 +34,7 @@ function search_bucket($bucket, $query) {
         try {
             $query = new-object regex $query, 'IgnoreCase'
         } catch {
-            abort "Invalid regular expression: $($_.exception.innerexception.message)"
+            abort "无效的正则表达式: $($_.exception.innerexception.message)"
         }
 
         $apps = $apps | Where-Object {
@@ -84,8 +85,8 @@ function search_remotes($query) {
     } | Where-Object { $_.results }
 
     if ($results.count -gt 0) {
-        "Results from other known buckets..."
-        "(add them using 'scoop bucket add <name>')"
+        "从未添加的仓库中发现应用..."
+        "(通过 'scoop bucket add <仓库名>' 来添加仓库)"
         ""
     }
 
@@ -105,7 +106,7 @@ Get-LocalBucket | ForEach-Object {
         Write-Host "'$name' bucket:"
         $res | ForEach-Object {
             $item = "    $($_.name) ($($_.version))"
-            if($_.bin) { $item += " --> includes '$($_.bin)'" }
+            if($_.bin) { $item += " --> 包含了 '$($_.bin)'" }
             $item
         }
         ""
@@ -114,7 +115,7 @@ Get-LocalBucket | ForEach-Object {
 
 if (!$local_results -and !(github_ratelimit_reached)) {
     $remote_results = search_remotes $query
-    if(!$remote_results) { [console]::error.writeline("No matches found."); exit 1 }
+    if(!$remote_results) { [console]::error.writeline("未找到匹配的应用."); exit 1 }
     $remote_results
 }
 

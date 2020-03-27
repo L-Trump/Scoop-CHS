@@ -1,5 +1,5 @@
 # Usage: scoop status
-# Summary: Show status and check for new app versions
+# Summary: 检查应用状态与应用更新
 
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
@@ -26,9 +26,9 @@ else {
 }
 
 if($needs_update) {
-    warn "Scoop is out of date. Run 'scoop update' to get the latest changes."
+    warn "Scoop有新的更新可用. 执行 'scoop update' 来更新Scoop."
 }
-else { success "Scoop is up to date."}
+else { success "Scoop已是最新."}
 
 $failed = @()
 $outdated = @()
@@ -63,7 +63,7 @@ $true, $false | ForEach-Object { # local and global apps
 }
 
 if($outdated) {
-    write-host -f DarkCyan 'Updates are available for:'
+    write-host -f DarkCyan '下列应用可更新:'
     $outdated.keys | ForEach-Object {
         $versions = $outdated.$_
         "    $_`: $($versions[0]) -> $($versions[1])"
@@ -71,7 +71,7 @@ if($outdated) {
 }
 
 if($onhold) {
-    write-host -f DarkCyan 'These apps are outdated and on hold:'
+    write-host -f DarkCyan '下列被锁定的应用可更新:'
     $onhold.keys | ForEach-Object {
         $versions = $onhold.$_
         "    $_`: $($versions[0]) -> $($versions[1])"
@@ -79,29 +79,29 @@ if($onhold) {
 }
 
 if($removed) {
-    write-host -f DarkCyan 'These app manifests have been removed:'
+    write-host -f DarkCyan '这些应用的Manifest已被移除:'
     $removed.keys | ForEach-Object {
         "    $_"
     }
 }
 
 if($failed) {
-    write-host -f DarkCyan 'These apps failed to install:'
+    write-host -f DarkCyan '下列应用安装失败:'
     $failed.keys | ForEach-Object {
         "    $_"
     }
 }
 
 if($missing_deps) {
-    write-host -f DarkCyan 'Missing runtime dependencies:'
+    write-host -f DarkCyan '下列应用缺失运行环境:'
     $missing_deps | ForEach-Object {
         $app, $deps = $_
-        "    '$app' requires '$([string]::join("', '", $deps))'"
+        "    '$app' 需要 '$([string]::join("', '", $deps))'"
     }
 }
 
 if(!$old -and !$removed -and !$failed -and !$missing_deps -and !$needs_update) {
-    success "Everything is ok!"
+    success "所有应用都没问题!"
 }
 
 exit 0

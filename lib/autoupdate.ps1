@@ -17,7 +17,7 @@ function find_hash_in_rdf([String] $url, [String] $basename) {
         [xml]$data = $wc.downloadstring($url)
     } catch [system.net.webexception] {
         write-host -f darkred $_
-        write-host -f darkred "URL $url is not valid"
+        write-host -f darkred "URL $url 无效"
         return $null
     }
 
@@ -46,7 +46,7 @@ function find_hash_in_textfile([String] $url, [Hashtable] $substitutions, [Strin
         $hashfile = $wc.downloadstring($url)
     } catch [system.net.webexception] {
         write-host -f darkred $_
-        write-host -f darkred "URL $url is not valid"
+        write-host -f darkred "URL $url 无效"
         return
     }
 
@@ -99,7 +99,7 @@ function find_hash_in_json([String] $url, [Hashtable] $substitutions, [String] $
         $json = $wc.downloadstring($url)
     } catch [system.net.webexception] {
         write-host -f darkred $_
-        write-host -f darkred "URL $url is not valid"
+        write-host -f darkred "URL $url 无效"
         return
     }
     $hash = json_path $json $jsonpath $substitutions
@@ -119,7 +119,7 @@ function find_hash_in_xml([String] $url, [Hashtable] $substitutions, [String] $x
         $xml = [xml]$wc.downloadstring($url)
     } catch [system.net.webexception] {
         write-host -f darkred $_
-        write-host -f darkred "URL $url is not valid"
+        write-host -f darkred "URL $url 无效"
         return
     }
 
@@ -161,7 +161,7 @@ function find_hash_in_headers([String] $url) {
         $res.Close()
     } catch [system.net.webexception] {
         write-host -f darkred $_
-        write-host -f darkred "URL $url is not valid"
+        write-host -f darkred "URL $url 无效"
         return
     }
 
@@ -186,10 +186,11 @@ function get_hash_for_app([String] $app, $config, [String] $version, [String] $u
     $hashfile_url = substitute $config.url $substitutions
     debug $hashfile_url
     if ($hashfile_url) {
-        write-host -f DarkYellow 'Searching hash for ' -NoNewline
-        write-host -f Green $basename -NoNewline
-        write-host -f DarkYellow ' in ' -NoNewline
+        write-host -f DarkYellow '在 ' -NoNewline
         write-host -f Green $hashfile_url
+        write-host -f DarkYellow '中为 ' -NoNewline
+        write-host -f Green $basename -NoNewline
+        write-host -f DarkYellow '查找Hash' -NoNewline
     }
 
     if ($hashmode.Length -eq 0 -and $config.url.Length -ne 0) {
@@ -260,26 +261,26 @@ function get_hash_for_app([String] $app, $config, [String] $version, [String] $u
         # got one!
         write-host -f DarkYellow 'Found: ' -NoNewline
         write-host -f Green $hash -NoNewline
-        write-host -f DarkYellow ' using ' -NoNewline
-        write-host -f Green  "$((Get-Culture).TextInfo.ToTitleCase($hashmode)) Mode"
+        write-host -f DarkYellow ' 使用 ' -NoNewline
+        write-host -f Green  "$((Get-Culture).TextInfo.ToTitleCase($hashmode)) 模式"
         return $hash
     } elseif ($hashfile_url) {
-        write-host -f DarkYellow "Could not find hash in $hashfile_url"
+        write-host -f DarkYellow "无法在 $hashfile_url 中找到Hash值"
     }
 
-    write-host -f DarkYellow 'Downloading ' -NoNewline
+    write-host -f DarkYellow '下载 ' -NoNewline
     write-host -f Green $basename -NoNewline
-    write-host -f DarkYellow ' to compute hashes!'
+    write-host -f DarkYellow ' 来计算Hash!'
     try {
         dl_with_cache $app $version $url $null $null $true
     } catch [system.net.webexception] {
         write-host -f darkred $_
-        write-host -f darkred "URL $url is not valid"
+        write-host -f darkred "URL $url 无效"
         return $null
     }
     $file = fullpath (cache_path $app $version $url)
     $hash = compute_hash $file 'sha256'
-    write-host -f DarkYellow 'Computed hash: ' -NoNewline
+    write-host -f DarkYellow '计算得到 hash: ' -NoNewline
     write-host -f Green $hash
     return $hash
 }
@@ -353,7 +354,7 @@ function get_version_substitutions([String] $version, [Hashtable] $customMatches
 }
 
 function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $matches) {
-    Write-Host -f DarkCyan "Autoupdating $app"
+    Write-Host -f DarkCyan "自动更新 $app"
     $has_changes = $false
     $has_errors = $false
     [Bool]$valid = $true
@@ -369,7 +370,7 @@ function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $
             $hash = get_hash_for_app $app $json.autoupdate.hash $version $url $substitutions
             if ($null -eq $hash) {
                 $valid = $false
-                Write-Host -f DarkRed "Could not find hash!"
+                Write-Host -f DarkRed "未找到Hash!"
             }
         }
 
@@ -379,7 +380,7 @@ function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $
             update_manifest_with_new_version $json $version $url $hash
         } else {
             $has_errors = $true
-            throw "Could not update $app"
+            throw "无法更新 $app"
         }
     } else {
         $json.architecture | Get-Member -MemberType NoteProperty | ForEach-Object {
@@ -395,7 +396,7 @@ function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $
                 $hash = get_hash_for_app $app (arch_specific "hash" $json.autoupdate $architecture) $version $url $substitutions
                 if ($null -eq $hash) {
                     $valid = $false
-                    Write-Host -f DarkRed "Could not find hash!"
+                    Write-Host -f DarkRed "未找到 hash!"
                 }
             }
 
@@ -405,7 +406,7 @@ function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $
                 update_manifest_with_new_version $json $version $url $hash $architecture
             } else {
                 $has_errors = $true
-                throw "Could not update $app $architecture"
+                throw "无法更新 $app $architecture"
             }
         }
     }
@@ -418,7 +419,7 @@ function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $
 
     if ($has_changes -and !$has_errors) {
         # write file
-        Write-Host -f DarkGreen "Writing updated $app manifest"
+        Write-Host -f DarkGreen "写入已更新的 $app manifest"
 
         $path = join-path $dir "$app.json"
 
@@ -431,6 +432,6 @@ function autoupdate([String] $app, $dir, $json, [String] $version, [Hashtable] $
             Write-Host -f DarkYellow $json.autoupdate.note
         }
     } else {
-        Write-Host -f DarkGray "No updates for $app"
+        Write-Host -f DarkGray "$app 无可用更新"
     }
 }

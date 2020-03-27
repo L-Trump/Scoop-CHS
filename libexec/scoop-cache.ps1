@@ -1,14 +1,15 @@
-# Usage: scoop cache show|rm [app]
-# Summary: Show or clear the download cache
-# Help: Scoop caches downloads so you don't need to download the same files
-# when you uninstall and re-install the same version of an app.
+# Usage: scoop cache show|rm [应用名]
+# Summary: 查看或者清除Scoop缓存
+# Help: Scoop会缓存已下载的文件，使你在卸载并再次安装
+# 相同版本时避免重复下载。
 #
-# You can use
+# 你可以使用
 #     scoop cache show
-# to see what's in the cache, and
-#     scoop cache rm <app> to remove downloads for a specific app.
+# 来查看所有缓存，并使用
+#     scoop cache rm <应用名>
+# 来删除某个应用的缓存（允许使用通配符*）
 #
-# To clear everything in your cache, use:
+# 删除所有缓存可以使用:
 #     scoop cache rm *
 param($cmd, $app)
 
@@ -33,12 +34,12 @@ function show($app) {
 
     $files | ForEach-Object { cacheinfo $_ } | Format-Table $f_size, $f_app, $f_url -auto -hide
 
-    "Total: $($files.length) $(pluralize $files.length 'file' 'files'), $(filesize $total_length)"
+    "共计: $($files.length) 个文件, $(filesize $total_length)"
 }
 
 switch($cmd) {
     'rm' {
-        if(!$app) { 'ERROR: <app> missing'; my_usage; exit 1 }
+        if(!$app) { '未指定应用 <应用名>'; my_usage; exit 1 }
         Remove-Item "$cachedir\$app#*"
         if(test-path("$cachedir\$app.txt")) {
             Remove-Item "$cachedir\$app.txt"

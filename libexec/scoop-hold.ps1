@@ -1,5 +1,5 @@
-# Usage: scoop hold <apps>
-# Summary: Hold an app to disable updates
+# Usage: scoop hold <应用名>
+# Summary: 锁定某个应用，避免其更新
 
 . "$psscriptroot\..\lib\help.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
@@ -17,7 +17,7 @@ $apps | ForEach-Object {
     $global = installed $app $true
 
     if (!(installed $app)) {
-        error "'$app' is not installed."
+        error "'$app' 未安装."
         return
     }
 
@@ -27,7 +27,7 @@ $apps | ForEach-Object {
     $json | Get-Member -MemberType Properties | ForEach-Object { $install.Add($_.Name, $json.($_.Name))}
     $install.hold = $true
     save_install_info $install $dir
-    success "$app is now locked and can not be updated anymore."
+    success "$app 成功锁定，解锁前将无法更新."
 }
 
 exit $exitcode

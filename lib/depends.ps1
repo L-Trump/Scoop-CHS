@@ -26,9 +26,9 @@ function dep_resolve($app, $arch, $resolved, $unresolved) {
 
     if(!$manifest) {
         if(((Get-LocalBucket) -notcontains $bucket) -and $bucket) {
-            warn "Bucket '$bucket' not installed. Add it with 'scoop bucket add $bucket' or 'scoop bucket add $bucket <repo>'."
+            warn "仓库 '$bucket' 未安装. 添加仓库： 'scoop bucket add $bucket' 或者 'scoop bucket add $bucket <repo>'."
         }
-        abort "Couldn't find manifest for '$app'$(if(!$bucket) { '.' } else { " from '$bucket' bucket." })"
+        abort "无法找到 '$app'$(if(!$bucket) { '.' } else { " 在 '$bucket' 中." })"
     }
 
     $deps = @(install_deps $manifest $arch) + @(runtime_deps $manifest) | Select-Object -Unique
@@ -36,7 +36,7 @@ function dep_resolve($app, $arch, $resolved, $unresolved) {
     foreach ($dep in $deps) {
         if ($resolved -notcontains $dep) {
             if ($unresolved -contains $dep) {
-                abort "Circular dependency detected: '$app' -> '$dep'."
+                abort "发现循环依赖: '$app' -> '$dep'."
             }
             dep_resolve $dep $arch $resolved $unresolved
         }

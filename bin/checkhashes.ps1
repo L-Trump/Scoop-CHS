@@ -27,7 +27,7 @@ param(
     [Parameter(Mandatory = $true)]
     [ValidateScript( {
         if (!(Test-Path $_ -Type Container)) {
-            throw "$_ is not a directory!"
+            throw "$_ 不是一个目录!"
         } else {
             $true
         }
@@ -80,13 +80,13 @@ foreach ($single in Get-ChildItem $Dir "$App.json") {
         url $manifest '32bit' | ForEach-Object { $urls += $_ }
         hash $manifest '32bit' | ForEach-Object { $hashes += $_ }
     } else {
-        err $name 'Manifest does not contain URL property.'
+        err $name 'Manifest中不包含可用的URL.'
         continue
     }
 
     # Number of URLS and Hashes is different
     if ($urls.Length -ne $hashes.Length) {
-        err $name 'URLS and hashes count mismatch.'
+        err $name 'URL和HASH数量不匹配.'
         continue
     }
 
@@ -138,7 +138,7 @@ foreach ($current in $MANIFESTS) {
         }
     } else {
         Write-Host "$($current.app): " -NoNewline
-        Write-Host 'Mismatch found ' -ForegroundColor Red
+        Write-Host 'HASH不匹配 ' -ForegroundColor Red
         $mismatched | ForEach-Object {
             $file = fullpath (cache_path $current.app $version $current.urls[$_])
             Write-Host  "`tURL:`t`t$($current.urls[$_])"
@@ -171,7 +171,7 @@ foreach ($current in $MANIFESTS) {
             }
         }
 
-        Write-Host "Writing updated $($current.app) manifest" -ForegroundColor DarkGreen
+        Write-Host "写入已更新的 $($current.app) manifest" -ForegroundColor DarkGreen
 
         $current.manifest = $current.manifest | ConvertToPrettyJson
         $path = Resolve-Path "$Dir\$($current.app).json"

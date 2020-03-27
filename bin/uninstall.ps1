@@ -23,11 +23,11 @@ if ($global -and !(is_admin)) {
 }
 
 if ($purge) {
-    warn 'This will uninstall Scoop, all the programs that have been installed with Scoop and all persisted data!'
+    warn '这将会删除Scoop,和所有通过Scoop安装的应用以及Persist数据!'
 } else {
-    warn 'This will uninstall Scoop and all the programs that have been installed with Scoop!'
+    warn '这将会Scoop和通过Scoop安装的应用!'
 }
-$yn = Read-Host 'Are you sure? (yN)'
+$yn = Read-Host '你确定要继续吗? (yN)'
 if ($yn -notlike 'y*') { exit }
 
 $errors = $false
@@ -40,7 +40,7 @@ function do_uninstall($app, $global) {
     $install = install_info $app $version $global
     $architecture = $install.architecture
 
-    Write-Output "Uninstalling '$app'"
+    Write-Output "卸载 '$app'"
     run_uninstaller $manifest $architecture $dir
     rm_shims $manifest $global $architecture
 
@@ -57,7 +57,7 @@ function do_uninstall($app, $global) {
         Remove-Item $appdir -Recurse -Force -ErrorAction Stop
     } catch {
         $errors = $true
-        warn "Couldn't remove $(friendly_path $appdir): $_.Exception"
+        warn "无法移除 $(friendly_path $appdir): $_.Exception"
     }
 }
 
@@ -65,7 +65,7 @@ function rm_dir($dir) {
     try {
         Remove-Item $dir -Recurse -Force -ErrorAction Stop
     } catch {
-        abort "Couldn't remove $(friendly_path $dir): $_"
+        abort "无法移除 $(friendly_path $dir): $_"
     }
 }
 
@@ -87,7 +87,7 @@ installed_apps $false | ForEach-Object { # local apps
 }
 
 if ($errors) {
-    abort 'Not all apps could be deleted. Try again or restart.'
+    abort '部分应用未成功删除，请再试一次或者重启后再试'
 }
 
 if ($purge) {
@@ -101,4 +101,4 @@ if ($purge) {
 remove_from_path (shimdir $false)
 if ($global) { remove_from_path (shimdir $true) }
 
-success 'Scoop has been uninstalled.'
+success 'Scoop 成功卸载.'

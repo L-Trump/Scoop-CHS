@@ -1,8 +1,8 @@
-# Usage: scoop reset <app>
-# Summary: Reset an app to resolve conflicts
-# Help: Used to resolve conflicts in favor of a particular app. For example,
-# if you've installed 'python' and 'python27', you can use 'scoop reset' to switch between
-# using one or the other.
+# Usage: scoop reset <应用名>
+# Summary: 调整应用来解决冲突
+# Help: 用以解决一些特殊应用间的冲突，如：
+# 如果你同时安装了'python'和'python27', 你可以使用 'scoop reset' 
+# 来决定你使用哪一个
 
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
@@ -16,7 +16,7 @@ reset_aliases
 $opt, $apps, $err = getopt $args
 if($err) { "scoop reset: $err"; exit 1 }
 
-if(!$apps) { error '<app> missing'; my_usage; exit 1 }
+if(!$apps) { error '未指定应用'; my_usage; exit 1 }
 
 if($apps -eq '*') {
     $local = installed_apps $false | ForEach-Object { ,@($_, $false) }
@@ -40,7 +40,7 @@ $apps | ForEach-Object {
     }
 
     if(!(installed $app)) {
-        error "'$app' isn't installed"
+        error "'$app' 未安装"
         return
     }
 
@@ -52,16 +52,16 @@ $apps | ForEach-Object {
     # if this is null we know the version they're resetting to
     # is not installed
     if ($manifest -eq $null) {
-        error "'$app ($version)' isn't installed"
+        error "'$app ($version)' 未安装"
         return
     }
 
     if($global -and !(is_admin)) {
-        warn "'$app' ($version) is a global app. You need admin rights to reset it. Skipping."
+        warn "'$app' ($version) 是一个全局应用，需要管理员权限来执行reset操作，已跳过."
         return
     }
 
-    write-host "Resetting $app ($version)."
+    write-host "重置到 $app ($version)."
 
     $dir = resolve-path (versiondir $app $version $global)
     $original_dir = $dir

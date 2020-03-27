@@ -68,7 +68,7 @@ param(
     [Switch] $SkipUpdated,
     [String] $Cookie,
     [String] $UserAgent,
-    [String] $Encode,
+    [String] $Encode = "UTF-8",
     [String] $Version = ''
 )
 

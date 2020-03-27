@@ -1,5 +1,5 @@
-# Usage: scoop info <app>
-# Summary: Display information about an app
+# Usage: scoop info <应用名>
+# Summary: 展示一个应用的信息
 param($app)
 
 . "$psscriptroot\..\lib\buckets.ps1"
@@ -31,7 +31,7 @@ if ($app -match '^(ht|f)tps?://|\\\\') {
 }
 
 if (!$manifest) {
-    abort "Could not find manifest for '$(show_app $app $bucket)'."
+    abort "无法找到 '$(show_app $app $bucket)' 的Manifest."
 }
 
 $install = install_info $app $status.version $global
@@ -53,16 +53,16 @@ if($status.installed) {
     if($status.version -eq $manifest.version) {
         $version_output = $status.version
     } else {
-        $version_output = "$($status.version) (Update to $($manifest.version) available)"
+        $version_output = "$($status.version) (新版本 $($manifest.version) 可用)"
     }
 }
 
 Write-Output "Name: $app"
 if ($manifest.description) {
-    Write-Output "Description: $($manifest.description)"
+    Write-Output "描述: $($manifest.description)"
 }
-Write-Output "Version: $version_output"
-Write-Output "Website: $($manifest.homepage)"
+Write-Output "版本: $version_output"
+Write-Output "主页: $($manifest.homepage)"
 # Show license
 if ($manifest.license) {
     $license = $manifest.license
@@ -84,7 +84,7 @@ Write-Output "Manifest:`n  $manifest_file"
 
 if($status.installed) {
     # Show installed versions
-    Write-Output "Installed:"
+    Write-Output "安装状态:"
     $versions = versions $app $global
     $versions | ForEach-Object {
         $dir = versiondir $app $_ $global
@@ -92,12 +92,12 @@ if($status.installed) {
         Write-Output "  $dir"
     }
 } else {
-    Write-Output "Installed: No"
+    Write-Output "安装状态: 未安装"
 }
 
 $binaries = @(arch_specific 'bin' $manifest $install.architecture)
 if($binaries) {
-    $binary_output = "Binaries:`n "
+    $binary_output = "可执行文件:`n "
     $binaries | ForEach-Object {
         if($_ -is [System.Array]) {
             $binary_output += " $($_[1]).exe"
@@ -110,9 +110,9 @@ if($binaries) {
 
 if($manifest.env_set -or $manifest.env_add_path) {
     if($status.installed) {
-        Write-Output "Environment:"
+        Write-Output "环境变量:"
     } else {
-        Write-Output "Environment: (simulated)"
+        Write-Output "环境变量: (模拟)"
     }
 }
 if($manifest.env_set) {

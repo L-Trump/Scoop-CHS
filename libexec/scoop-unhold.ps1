@@ -1,5 +1,5 @@
-# Usage: scoop unhold <app>
-# Summary: Unhold an app to enable updates
+# Usage: scoop unhold <应用名>
+# Summary: 解除锁定来允许应用更新
 
 . "$psscriptroot\..\lib\help.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
@@ -17,7 +17,7 @@ $apps | ForEach-Object {
     $global = installed $app $true
 
     if (!(installed $app)) {
-        error "'$app' is not installed."
+        error "'$app' 未安装."
         return
     }
 
@@ -27,7 +27,7 @@ $apps | ForEach-Object {
     $json | Get-Member -MemberType Properties | ForEach-Object { $install.Add($_.Name, $json.($_.Name))}
     $install.hold = $null
     save_install_info $install $dir
-    success "$app is now unlocked and can be updated again."
+    success "$app 现在已解锁，可以进行更新了."
 }
 
 exit $exitcode

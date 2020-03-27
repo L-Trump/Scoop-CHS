@@ -1,30 +1,34 @@
-# Usage: scoop config [rm] name [value]
-# Summary: Get or set configuration values
-# Help: The scoop configuration file is saved at ~/.config/scoop/config.json.
+# Usage: scoop config [rm] 配置项 [配置值]
+# Summary: 获取或者设置Scoop配置
+# Help: Scoop配置文件保存在 ~/.config/scoop/config.json.
 #
-# To get a configuration setting:
+# 获取一项设置:
 #
-#     scoop config <name>
+#     scoop config <配置项>
 #
-# To set a configuration setting:
+# 添加/修改一项设置:
 #
-#     scoop config <name> <value>
+#     scoop config <配置项> <配置值>
 #
-# To remove a configuration setting:
+# 移除一项设置：
 #
-#     scoop config rm <name>
+#     scoop config rm <配置项>
 #
-# Settings
+# 代理设置
 # --------
 #
-# proxy: [username:password@]host:port
+# proxy: [用户名:密码@]地址:端口
+# 
+# e.g.
+#   scoop config proxy 127.0.0.1:1080
+#   scoop config proxy username:password@127.0.0.1:1080
 #
-# By default, Scoop will use the proxy settings from Internet Options, but with anonymous authentication.
+# 默认情况下，Scoop会使用系统代理，然而这并不能指定用户名密码
 #
-# * To use the credentials for the current logged-in user, use 'currentuser' in place of username:password
-# * To use the system proxy settings configured in Internet Options, use 'default' in place of host:port
-# * An empty or unset value for proxy is equivalent to 'default' (with no username or password)
-# * To bypass the system proxy and connect directly, use 'none' (with no username or password)
+# * 如果要以当前登录的用户进行身份验证,  用 'currentuser' 代替 username:password
+# * 如果要使用系统代理的地址，用 'default' 代替 '地址:端口'
+# * 不配置proxy项相当于将proxy设为 'default'
+# * 如果要跳过代理（无视系统代理），使用 'none' 来配置proxy项
 
 param($name, $value)
 
@@ -37,14 +41,14 @@ if(!$name) { my_usage; exit 1 }
 
 if($name -like 'rm') {
     set_config $value $null | Out-Null
-    Write-Output "'$value' has been removed"
+    Write-Output "'$value' 已移除"
 } elseif($null -ne $value) {
     set_config $name $value | Out-Null
-    Write-Output "'$name' has been set to '$value'"
+    Write-Output "'$name' 被设置为 '$value'"
 } else {
     $value = get_config $name
     if($null -eq $value) {
-        Write-Output "'$name' is not set"
+        Write-Output "'$name' 未设置"
     } else {
         Write-Output $value
     }
