@@ -461,7 +461,7 @@
             "type": "string"
         },
         "innosetup": {
-            "description": "True if the installer InnoSetup based. Found in https://github.com/lukesampson/scoop/search?l=JSON&q=innosetup",
+            "description": "True if the installer InnoSetup based. Found in https://github.com/L-Trump/Scoop-CHS/search?l=JSON&q=innosetup",
             "type": "boolean"
         },
         "installer": {
