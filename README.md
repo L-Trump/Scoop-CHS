@@ -3,20 +3,20 @@
     <h1 align="center">Scoop</h1>
 </p>
 <p align="center">
-<b><a href="https://github.com/lukesampson/scoop#what-does-scoop-do">Features</a></b>
+<b><a href="https://github.com/L-Trump/scoop-CHS#Scoop可以做什么">功能</a></b>
 |
-<b><a href="https://github.com/lukesampson/scoop#installation">Installation</a></b>
+<b><a href="https://github.com/L-Trump/scoop-CHS#安装">安装</a></b>
 |
-<b><a href="https://github.com/lukesampson/scoop/wiki">Documentation</a></b>
+<b><a href="https://github.com/lukesampson/scoop/wiki">文档</a></b>
 </p>
 - - -
 <p align="center" >
-    <a href="https://github.com/lukesampson/scoop">
-        <img src="https://img.shields.io/github/languages/code-size/lukesampson/scoop.svg" alt="Code Size" />
+    <a href="https://github.com/L-Trump/scoop-CHS">
+        <img src="https://img.shields.io/github/languages/code-size/L-Trump/Scoop-CHS.svg" alt="Code Size" />
     </a>
-    <a href="https://github.com/lukesampson/scoop">
-        <img src="https://img.shields.io/github/repo-size/lukesampson/scoop.svg" alt="Repository size" />
-    </a>
+    <a href="https://github.com/L-Trump/scoop-CHS">
+        <img src="https://img.shields.io/github/repo-size/L-Trump/Scoop-CHS.svg" alt="Repository size" />
+    </a><!--
     <a href="https://ci.appveyor.com/project/lukesampson/scoop">
         <img src="https://ci.appveyor.com/api/projects/status/05foxatmrqo0l788?svg=true" alt="Build Status" />
     </a>
@@ -25,9 +25,9 @@
     </a>
     <a href="https://gitter.im/lukesampson/scoop">
         <img src="https://badges.gitter.im/lukesampson/scoop.png" alt="Gitter Chat" />
-    </a>
-    <a href="https://github.com/lukesampson/scoop/blob/master/LICENSE">
-        <img src="https://img.shields.io/github/license/lukesampson/scoop.svg" alt="License" />
+    </a>-->
+    <a href="https://github.com/L-Trump/Scoop-CHS/blob/master/LICENSE">
+        <img src="https://img.shields.io/github/license/L-Trump/Scoop-CHS.svg" alt="License" />
     </a>
 </p>
 
@@ -35,7 +35,21 @@ Scoop是一个Windows上的命令行包管理器
 
 ## 在开始之前
 
-## Scoop可以做什么?
+首先由于Windows坑爹的特性，简体中文系统Powershell默认的语言编码是GBK，然而Scoop所有的脚本都用的UTF-8编码，导致默认的中文输出全是乱码，所以在安装汉化版Scoop之前，请先进行如下操作：
+
+进入控制面板-时钟与区域-区域-管理，在更改系统区域设置中，勾上以下选项
+
+![Snipaste_2020-03-27_23-41-25.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-41-25.png)
+
+然后重启就好了。
+
+需要注意的是这波操作之后powershell面板可能会变得有点丑，可以在powershell窗口顶栏右键-默认值进行配置
+
+![Snipaste_2020-03-27_23-42-58.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-42-58.png)
+
+![Snipaste_2020-03-27_23-44-18.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-44-18.png)
+
+## Scoop可以做什么
 
 Scoop 能够十分方便地从命令控制台Powershell中安装软件，它尝试消除以下情况
 
@@ -100,7 +114,7 @@ $env:SCOOP_GLOBAL='F:\GlobalScoopApps'
 # run the installer
 ```
 
-## [Documentation](https://github.com/lukesampson/scoop/wiki)
+## [Documentation](https://github.com/L-Trump/scoop-CHS/wiki)
 
 ## 通过 `aria2` 进行多线程下载
 
@@ -136,7 +150,7 @@ Scoop也支持单文件和Powershell脚本. 例如 [runat](https://github.com/Sc
 以下仓库可以直接添加:
 
 - [main](https://github.com/ScoopInstaller/Main) - Scoop默认仓库，里面基本都是CLI命令行应用
-- [extras](https://github.com/lukesampson/scoop-extras) - 不符合Main仓库[标准](https://github.com/lukesampson/scoop/wiki/Criteria-for-including-apps-in-the-main-bucket)的应用很多都到了这里
+- [extras](https://github.com/L-Trump/scoop-CHS-extras) - 不符合Main仓库[标准](https://github.com/L-Trump/scoop-CHS/wiki/Criteria-for-including-apps-in-the-main-bucket)的应用很多都到了这里
 - [games](https://github.com/Calinou/scoop-games) - 开源/免费的游戏以及与游戏相关的应用
 - [nerd-fonts](https://github.com/matthewjberger/scoop-nerd-fonts) -  Nerd 字体库
 - [nirsoft](https://github.com/kodybrown/scoop-nirsoft) - [250](https://github.com/rasa/scoop-directory/blob/master/by-score.md#MCOfficer_scoop-nirsoft) [Nirsoft](https://nirsoft.net) 应用的集合
