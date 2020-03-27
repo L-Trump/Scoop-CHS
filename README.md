@@ -9,7 +9,6 @@
 |
 <b><a href="https://github.com/lukesampson/scoop/wiki">Documentation</a></b>
 </p>
-
 - - -
 <p align="center" >
     <a href="https://github.com/lukesampson/scoop">
@@ -32,20 +31,22 @@
     </a>
 </p>
 
-Scoop is a command-line installer for Windows.
+Scoop是一个Windows上的命令行包管理器
 
-## What does Scoop do?
+## 在开始之前
 
-Scoop installs programs from the command line with a minimal amount of friction. It tries to eliminate things like:
+## Scoop可以做什么?
 
-- Permission popup windows
-- GUI wizard-style installers
-- Path pollution from installing lots of programs
-- Unexpected side-effects from installing and uninstalling programs
-- The need to find and install dependencies
-- The need to perform extra setup steps to get a working program
+Scoop 能够十分方便地从命令控制台Powershell中安装软件，它尝试消除以下情况
 
-Scoop is very scriptable, so you can run repeatable setups to get your environment just the way you like, e.g.:
+- 权限弹出窗口
+- GUI向导式安装程序
+- 安装过多程序后乱七八糟的目录结构
+- 安装或者卸载应用后那些不令人愉快地副作用
+- 各种麻烦的依赖
+- 需要执行额外的设置步骤才能运行的程序（如要求设置环境变量）
+
+Scoop的脚本配置十分齐全，你可以有多种方式来安装应用 e.g.:
 
 ```powershell
 scoop install sudo
@@ -54,40 +55,44 @@ scoop install aria2 curl grep sed less touch
 scoop install python ruby go perl
 ```
 
-If you've built software that you'd like others to use, Scoop is an alternative to building an installer (e.g. MSI or InnoSetup) — you just need to zip your program and provide a JSON manifest that describes how to install it.
+如果你构建了你自己的软件并想要其他人使用, Scoop是其他类型安装程序的替代品 (e.g. MSI 或 InnoSetup) — 你只需要把你的程序打包成压缩包，然后写一个Json格式的文件来告诉Scoop基本信息就行。
 
-## Requirements
+## 系统环境
 
 - Windows 7 SP1+ / Windows Server 2008+
-- [PowerShell 5](https://aka.ms/wmf5download) (or later, include [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-6)) and [.NET Framework 4.5](https://www.microsoft.com/net/download) (or later)
-- PowerShell must be enabled for your user account e.g. `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
-## Installation
+- [PowerShell 5](https://aka.ms/wmf5download) (或者更新版本, 包括 [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-6)) 以及 [.NET Framework 4.5](https://www.microsoft.com/net/download) (或者更新版本)
 
-Run the following command from your PowerShell to install scoop to its default location (`C:\Users\<user>\scoop`)
+- Powershell对当前用户来说必须可用
+
+   e.g. `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+## 安装
+
+运行下面命令将Scoop安装到默认目录 (`C:\Users\<user>\scoop`)
 
 ```powershell
 Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
 
-# or shorter
+# 或者简写为
 iwr -useb get.scoop.sh | iex
 ```
 
-Once installed, run `scoop help` for instructions.
+安装完后使用`scoop help`来获取帮助
 
-The default setup is configured so all user installed programs and Scoop itself live in `C:\Users\<user>\scoop`.
-Globally installed programs (`--global`) live in `C:\ProgramData\scoop`.
-These settings can be changed through environment variables.
+默认情况下所有用户会安装scoop软件到各自的用户目录 `C:\Users\<user>\scoop`.
+进行全局安装的软件 (`--global`) 将会存在于 `C:\ProgramData\scoop`.
+这些设置可以通过调整环境变量来更改
 
-### Install Scoop to a Custom Directory by changing `SCOOP`
+### 通过环境变量`SCOOP`将Scoop安装到自定义目录
 
 ```powershell
 $env:SCOOP='D:\Applications\Scoop'
 [Environment]::SetEnvironmentVariable('SCOOP', $env:SCOOP, 'User')
-# run the installer
+# 然后安装Scoop
 ```
 
-### Configure Scoop to install global programs to a Custom Directory by changing `SCOOP_GLOBAL`
+### 通过环境变量`SCOOP_GLOBAL`将全局应用安装到自定义目录
 
 ```powershell
 $env:SCOOP_GLOBAL='F:\GlobalScoopApps'
@@ -97,66 +102,61 @@ $env:SCOOP_GLOBAL='F:\GlobalScoopApps'
 
 ## [Documentation](https://github.com/lukesampson/scoop/wiki)
 
-## Multi-connection downloads with `aria2`
+## 通过 `aria2` 进行多线程下载
 
-Scoop can utilize [`aria2`](https://github.com/aria2/aria2) to use multi-connection downloads. Simply install `aria2` through Scoop and it will be used for all downloads afterward.
+Scoop能够通过Aria2进行多线程下载来提速，先安装Aria2：
 
 ```powershell
 scoop install aria2
 ```
 
-You can tweak the following `aria2` settings with the `scoop config` command:
+你可以通过`scoop config`命令来更改一些Aria2设置
 
-- aria2-enabled (default: true)
+- aria2-enabled (default: true) 
 - [aria2-retry-wait](https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-retry-wait) (default: 2)
 - [aria2-split](https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-s) (default: 5)
 - [aria2-max-connection-per-server](https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-x) (default: 5)
 - [aria2-min-split-size](https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-k) (default: 5M)
 
-## Inspiration
+## 灵感来源
 
 - [Homebrew](http://mxcl.github.io/homebrew/)
 - [sub](https://github.com/37signals/sub#readme)
 
-## What sort of apps can Scoop install?
+## Scoop可以安装哪些应用?
 
-The apps that install best with Scoop are commonly called "portable" apps: i.e. compressed program files that run stand-alone when extracted and don't have side-effects like changing the registry or putting files outside the program directory.
+Scoop兼容性性最佳的通常是 "便携式" 应用: 即解压后就能独立运行并且不依赖于额外的外部条件，如注册表、额外的应用目录等。
 
-Since installers are common, Scoop supports them too (and their uninstallers).
+而另外一些常见的应用, Scoop也可以安装（当然也可以卸载）.
 
-Scoop is also great at handling single-file programs and Powershell scripts. These don't even need to be compressed. See the [runat](https://github.com/ScoopInstaller/Main/blob/master/bucket/runat.json) package for an example: it's really just a GitHub gist.
+Scoop也支持单文件和Powershell脚本. 例如 [runat](https://github.com/ScoopInstaller/Main/blob/master/bucket/runat.json): 这只是 GitHub gist.
 
-### Support this project
+## 内置的Bucket仓库
 
-If you find Scoop useful and would like to support ongoing development and maintenance, here's how:
+以下仓库可以直接添加:
 
-- [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DM2SUH9EUXSKJ) (one-time donation)
-
-## Known application buckets
-
-The following buckets are known to scoop:
-
-- [main](https://github.com/ScoopInstaller/Main) - Default bucket for the most common (mostly CLI) apps
-- [extras](https://github.com/lukesampson/scoop-extras) - Apps that don't fit the main bucket's [criteria](https://github.com/lukesampson/scoop/wiki/Criteria-for-including-apps-in-the-main-bucket)
-- [games](https://github.com/Calinou/scoop-games) - Open source/freeware games and game-related tools
-- [nerd-fonts](https://github.com/matthewjberger/scoop-nerd-fonts) -  Nerd Fonts
-- [nirsoft](https://github.com/kodybrown/scoop-nirsoft) - A subset of the [250](https://github.com/rasa/scoop-directory/blob/master/by-score.md#MCOfficer_scoop-nirsoft) [Nirsoft](https://nirsoft.net) apps
-- [java](https://github.com/ScoopInstaller/Java) - Installers for Oracle Java, OpenJDK, Zulu, ojdkbuild, AdoptOpenJDK, Amazon Corretto, BellSoft Liberica & SapMachine
-- [jetbrains](https://github.com/Ash258/Scoop-JetBrains) - Installers for all JetBrains utilities and IDEs
+- [main](https://github.com/ScoopInstaller/Main) - Scoop默认仓库，里面基本都是CLI命令行应用
+- [extras](https://github.com/lukesampson/scoop-extras) - 不符合Main仓库[标准](https://github.com/lukesampson/scoop/wiki/Criteria-for-including-apps-in-the-main-bucket)的应用很多都到了这里
+- [games](https://github.com/Calinou/scoop-games) - 开源/免费的游戏以及与游戏相关的应用
+- [nerd-fonts](https://github.com/matthewjberger/scoop-nerd-fonts) -  Nerd 字体库
+- [nirsoft](https://github.com/kodybrown/scoop-nirsoft) - [250](https://github.com/rasa/scoop-directory/blob/master/by-score.md#MCOfficer_scoop-nirsoft) [Nirsoft](https://nirsoft.net) 应用的集合
+- [java](https://github.com/ScoopInstaller/Java) - Oracle Java, OpenJDK, Zulu, ojdkbuild, AdoptOpenJDK, Amazon Corretto, BellSoft Liberica & SapMachine的安装仓库
+- [jetbrains](https://github.com/Ash258/Scoop-JetBrains) - 所有 JetBrains 程序和IDE的集合
 <!-- * [nightlies](https://github.com/ScoopInstaller/Nightlies) - No longer used -->
-- [nonportable](https://github.com/TheRandomLabs/scoop-nonportable) - Non-portable apps (may require UAC)
-- [php](https://github.com/ScoopInstaller/PHP) - Installers for most versions of PHP
-- [versions](https://github.com/ScoopInstaller/Versions) - Alternative versions of apps found in other buckets
+- [nonportable](https://github.com/TheRandomLabs/scoop-nonportable) - 非便携式应用 (也许需要 UAC 权限)
+- [php](https://github.com/ScoopInstaller/PHP) - 绝大部分版本PHP的安装仓库
+- [versions](https://github.com/ScoopInstaller/Versions) - 在其他仓库中找到的应用的一些额外版本
 
-The main bucket is installed by default. To add any of the other buckets, type:
+Main主仓库是默认添加的，如果需要添加其他内置仓库:
 ```
-scoop bucket add bucketname
+scoop bucket add 仓库名
 ```
-For example, to add the extras bucket, type:
+例如添加Extras仓库:
 ```
 scoop bucket add extras
 ```
 
-## Other application buckets
+## 其他应用
 
-Many other application buckets hosted on Github can be found in the [Scoop Directory](https://github.com/rasa/scoop-directory).
+其他存在于Github上的Scoop仓库可以在这里找到 [Scoop Directory](https://github.com/rasa/scoop-directory).
+
