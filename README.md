@@ -49,6 +49,16 @@ Scoop是一个Windows上的命令行包管理器
 
 ![Snipaste_2020-03-27_23-44-18.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-44-18.png)
 
+## 从英文版Scoop升级
+
+**你不需要重装Scoop**！真的！
+
+打开`C:\Users\<username>\.config\scoop\config.json`，修改SCOOP_REPO项为本项目地址：
+
+![Snipaste_2020-03-28_12-16-10.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-28_12-16-10.png)
+
+然后执行`scoop update`即可。**如果你需要使用UTF8**，那么把下面的master换成utf8即可
+
 ## Scoop可以做什么
 
 Scoop 能够十分方便地从命令控制台Powershell中安装软件，它尝试消除以下情况

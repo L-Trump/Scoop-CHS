@@ -30,7 +30,7 @@ if ([System.Enum]::GetNames([System.Net.SecurityProtocolType]) -notcontains 'Tls
 }
 
 # get core functions
-$core_url = 'https://raw.githubusercontent.com/L-Trump/Scoop-CHS/master/lib/core.ps1'
+$core_url = 'https://raw.githubusercontent.com/L-Trump/Scoop-CHS/utf8/lib/core.ps1'
 Write-Output '配置中...'
 Invoke-Expression (new-object net.webclient).downloadstring($core_url)
 
@@ -43,7 +43,7 @@ if (installed 'scoop') {
 $dir = ensure (versiondir 'scoop' 'current')
 
 # download scoop zip
-$zipurl = 'https://github.com/L-Trump/Scoop-CHS/archive/master.zip'
+$zipurl = 'https://github.com/L-Trump/Scoop-CHS/archive/utf8.zip'
 $zipfile = "$dir\scoop.zip"
 Write-Output '下载 scoop...'
 dl $zipurl $zipfile
@@ -51,7 +51,7 @@ dl $zipurl $zipfile
 Write-Output '解压中...'
 Add-Type -Assembly "System.IO.Compression.FileSystem"
 [IO.Compression.ZipFile]::ExtractToDirectory($zipfile, "$dir\_tmp")
-Copy-Item "$dir\_tmp\*master\*" $dir -Recurse -Force
+Copy-Item "$dir\_tmp\*utf8\*" $dir -Recurse -Force
 Remove-Item "$dir\_tmp", $zipfile -Recurse -Force
 
 Write-Output '创建 shim...'
