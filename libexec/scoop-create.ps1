@@ -1,4 +1,4 @@
-# Usage: scoop create <url>
+﻿# Usage: scoop create <url>
 # Summary: 创建一个自定义应用
 # Help: 创建你的自定义应用Manifest
 param($url)

@@ -1,4 +1,4 @@
-Write-Host "PowerShell: $($PSVersionTable.PSVersion)"
+﻿Write-Host "PowerShell: $($PSVersionTable.PSVersion)"
 (7z.exe | Select-String -Pattern '7-Zip').ToString()
 Write-Host "Install dependencies ..."
 Install-Module -Repository PSGallery -Scope CurrentUser -Force -Name Pester -SkipPublisherCheck

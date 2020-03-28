@@ -1,4 +1,4 @@
-$repo_dir = (Get-Item $MyInvocation.MyCommand.Path).Directory.Parent.FullName
+﻿$repo_dir = (Get-Item $MyInvocation.MyCommand.Path).Directory.Parent.FullName
 
 $repo_files = @( Get-ChildItem $repo_dir -file -recurse -force )
 

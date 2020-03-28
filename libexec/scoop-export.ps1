@@ -1,4 +1,4 @@
-# Usage: scoop export > "文件名"
+﻿# Usage: scoop export > "文件名"
 # Summary: 导出已安装的应用列表（可导入）
 # Help: 列出所有已安装的应用。
 

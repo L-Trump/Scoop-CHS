@@ -1,4 +1,4 @@
-if(!$script:run) { $script:run = 0 }
+﻿if(!$script:run) { $script:run = 0 }
 if(!$script:failed) { $script:failed = 0 }
 
 function filter_tests($arg) {

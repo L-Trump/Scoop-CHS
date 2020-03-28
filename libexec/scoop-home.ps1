@@ -1,4 +1,4 @@
-# Usage: scoop home <应用名>
+﻿# Usage: scoop home <应用名>
 # Summary: 打开应用的主页
 param($app)
 

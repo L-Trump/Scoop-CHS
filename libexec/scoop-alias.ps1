@@ -1,4 +1,4 @@
-# Usage: scoop alias add|list|rm [<参数>]
+﻿# Usage: scoop alias add|list|rm [<参数>]
 # Summary: 管理Scoop别名
 # Help: 添加, 移除 或者列举 Scoop 别名
 #

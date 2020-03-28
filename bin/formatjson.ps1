@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Format manifest.
 .PARAMETER App

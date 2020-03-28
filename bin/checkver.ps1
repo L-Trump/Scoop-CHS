@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Check manifest for a newer version.
 .DESCRIPTION

@@ -1,4 +1,4 @@
-param($bucketdir = "$psscriptroot\..\bucket\")
+﻿param($bucketdir = "$psscriptroot\..\bucket\")
 . "$psscriptroot\Scoop-TestLib.ps1"
 . "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"

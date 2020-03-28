@@ -1,4 +1,4 @@
-# Usage: scoop which <命令>
+﻿# Usage: scoop which <命令>
 # Summary: 定位一个 shim 或可执行文件 (类似于Linux中的'which')
 # Help: 定位一个由Scoop安装的 shim 或可执行文件的路径 (类似于Linux中的'which')
 param($command)

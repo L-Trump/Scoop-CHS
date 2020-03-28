@@ -1,4 +1,4 @@
-# Usage: scoop info <应用名>
+﻿# Usage: scoop info <应用名>
 # Summary: 展示一个应用的信息
 param($app)
 

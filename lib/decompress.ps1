@@ -1,4 +1,4 @@
-function Test-7zipRequirement {
+﻿function Test-7zipRequirement {
     [CmdletBinding(DefaultParameterSetName = "URL")]
     [OutputType([Boolean])]
     param (

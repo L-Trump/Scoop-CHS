@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Check if manifest contains checkver and autoupdate property.
 .PARAMETER App

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Uninstall ALL scoop applications and scoop itself.
 .PARAMETER global

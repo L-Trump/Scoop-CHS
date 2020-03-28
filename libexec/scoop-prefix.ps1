@@ -1,4 +1,4 @@
-# Usage: scoop prefix <应用名>
+﻿# Usage: scoop prefix <应用名>
 # Summary: 返回应用的主目录
 param($app)
 

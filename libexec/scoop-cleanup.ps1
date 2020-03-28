@@ -1,4 +1,4 @@
-# Usage: scoop cleanup <应用名> [选项]
+﻿# Usage: scoop cleanup <应用名> [选项]
 # Summary: 清除应用的旧版本残留
 # Help: 'scoop cleanup' 可以用来清除应用的旧版本残留.
 # 'scoop cleanup <应用名>' 会删除指定应用的所有旧版本文件

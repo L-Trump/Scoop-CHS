@@ -1,4 +1,4 @@
-. "$psscriptroot\..\lib\core.ps1"
+﻿. "$psscriptroot\..\lib\core.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
 . "$psscriptroot\..\lib\install.ps1"
 . "$psscriptroot\..\lib\unix.ps1"

@@ -1,4 +1,4 @@
-# Usage: scoop cache show|rm [应用名]
+﻿# Usage: scoop cache show|rm [应用名]
 # Summary: 查看或者清除Scoop缓存
 # Help: Scoop会缓存已下载的文件，使你在卸载并再次安装
 # 相同版本时避免重复下载。

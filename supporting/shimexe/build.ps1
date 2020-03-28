@@ -1,4 +1,4 @@
-Param([Switch]$Fast)
+﻿Param([Switch]$Fast)
 Push-Location $psscriptroot
 . "$psscriptroot\..\..\lib\install.ps1"
 

@@ -1,4 +1,4 @@
-# Usage: scoop depends <应用名>
+﻿# Usage: scoop depends <应用名>
 # Summary: 查看某个应用的依赖
 
 . "$psscriptroot\..\lib\depends.ps1"

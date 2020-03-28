@@ -1,4 +1,4 @@
-# Creates shortcut for the app in the start menu
+﻿# Creates shortcut for the app in the start menu
 function create_startmenu_shortcuts($manifest, $dir, $global, $arch) {
     $shortcuts = @(arch_specific 'shortcuts' $manifest $arch)
     $shortcuts | Where-Object { $_ -ne $null } | ForEach-Object {

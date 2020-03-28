@@ -1,4 +1,4 @@
-# Note: This file is for overwriting global variables and functions to make
+﻿# Note: This file is for overwriting global variables and functions to make
 #       them unix compatible. It has to be imported after everything else!
 
 function is_unix() { $PSVersionTable.Platform -eq 'Unix' }

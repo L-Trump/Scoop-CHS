@@ -1,4 +1,4 @@
-#requires -Version 5.0
+﻿#requires -Version 5.0
 #requires -Modules @{ ModuleName = 'BuildHelpers'; ModuleVersion = '2.0.1' }
 #requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '4.4.0' }
 #requires -Modules @{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.17.1' }

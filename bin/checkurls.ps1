@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     List manifests which do not have valid URLs.
 .PARAMETER App

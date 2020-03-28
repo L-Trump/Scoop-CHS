@@ -1,4 +1,4 @@
-# Usage: scoop bucket add|list|known|rm [<参数>]
+﻿# Usage: scoop bucket add|list|known|rm [<参数>]
 # Summary: 管理Scoop仓库
 # Help: 添加, 列举或者删除仓库.
 #

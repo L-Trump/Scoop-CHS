@@ -1,4 +1,4 @@
-# for development, update the installed scripts to match local source
+﻿# for development, update the installed scripts to match local source
 . "$psscriptroot\..\lib\core.ps1"
 
 $src = relpath ".."

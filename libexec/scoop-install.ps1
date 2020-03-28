@@ -1,4 +1,4 @@
-# Usage: scoop install <[仓库]/应用名> [选项]
+﻿# Usage: scoop install <[仓库]/应用名> [选项]
 # Summary: 安装应用
 # Help: e.g. 常规安装 (使用已添加的仓库):
 #      scoop install git

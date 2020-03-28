@@ -1,4 +1,4 @@
-function find_description($url, $html, $redir = $false) {
+﻿function find_description($url, $html, $redir = $false) {
     $meta = meta_tags $html
 
     # check <meta property="og:description">

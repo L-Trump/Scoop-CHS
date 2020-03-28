@@ -1,4 +1,4 @@
-# Usage: scoop uninstall <应用名> [选项]
+﻿# Usage: scoop uninstall <应用名> [选项]
 # Summary: 卸载应用
 # Help: e.g. scoop uninstall git
 #

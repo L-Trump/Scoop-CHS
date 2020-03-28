@@ -1,4 +1,4 @@
-# adapted from http://hg.python.org/cpython/file/2.7/Lib/getopt.py
+﻿# adapted from http://hg.python.org/cpython/file/2.7/Lib/getopt.py
 # argv:
 #    array of arguments
 # shortopts:

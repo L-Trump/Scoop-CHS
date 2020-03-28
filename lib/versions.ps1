@@ -1,4 +1,4 @@
-# versions
+﻿# versions
 function latest_version($app, $bucket, $url) {
     (manifest $app $bucket $url).version
 }

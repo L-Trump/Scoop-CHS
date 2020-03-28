@@ -1,4 +1,4 @@
-if([String]::IsNullOrEmpty($MyInvocation.PSScriptRoot)) {
+﻿if([String]::IsNullOrEmpty($MyInvocation.PSScriptRoot)) {
     Write-Error 'This script should not be called directly! It has to be imported from a buckets test file!'
     exit 1
 }

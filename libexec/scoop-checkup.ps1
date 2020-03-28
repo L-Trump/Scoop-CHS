@@ -1,4 +1,4 @@
-# Usage: scoop checkup
+﻿# Usage: scoop checkup
 # Summary: 检查潜在的问题
 # Help: 执行一系列诊断测试以尝试识别可能存在的问题
 

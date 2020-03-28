@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Check if ALL urls inside manifest have correct hashes.
 .PARAMETER App

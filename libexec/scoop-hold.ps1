@@ -1,4 +1,4 @@
-# Usage: scoop hold <应用名>
+﻿# Usage: scoop hold <应用名>
 # Summary: 锁定某个应用，避免其更新
 
 . "$psscriptroot\..\lib\help.ps1"

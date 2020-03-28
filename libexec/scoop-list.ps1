@@ -1,4 +1,4 @@
-# Usage: scoop list [匹配值]
+﻿# Usage: scoop list [匹配值]
 # Summary: 列出已安装应用
 # Help: 列出所有已安装应用，或者与匹配值匹配的应用
 param($query)

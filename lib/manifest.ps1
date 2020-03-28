@@ -1,4 +1,4 @@
-. "$psscriptroot/core.ps1"
+﻿. "$psscriptroot/core.ps1"
 . "$psscriptroot/autoupdate.ps1"
 
 function manifest_path($app, $bucket) {

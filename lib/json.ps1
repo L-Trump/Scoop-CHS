@@ -1,4 +1,4 @@
-# Convert objects to pretty json
+﻿# Convert objects to pretty json
 # Only needed until PowerShell ConvertTo-Json will be improved https://github.com/PowerShell/PowerShell/issues/2736
 # https://github.com/PowerShell/PowerShell/issues/2736 was fixed in pwsh
 # Still needed in normal powershell

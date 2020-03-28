@@ -1,4 +1,4 @@
-# Usage: scoop config [rm] 配置项 [配置值]
+﻿# Usage: scoop config [rm] 配置项 [配置值]
 # Summary: 获取或者设置Scoop配置
 # Help: Scoop配置文件保存在 ~/.config/scoop/config.json.
 #

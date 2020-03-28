@@ -1,4 +1,4 @@
-# Usage: scoop status
+﻿# Usage: scoop status
 # Summary: 检查应用状态与应用更新
 
 . "$psscriptroot\..\lib\core.ps1"

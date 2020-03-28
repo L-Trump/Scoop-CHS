@@ -1,4 +1,4 @@
-# Usage: scoop virustotal [* | app1 app2 ...] [options]
+﻿# Usage: scoop virustotal [* | app1 app2 ...] [options]
 # Summary: 在Virustotal.com中查找应用的Hash值
 # Help: Look for app's hash (MD5, SHA1 or SHA256) on virustotal.com
 #

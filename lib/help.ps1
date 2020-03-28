@@ -1,4 +1,4 @@
-function usage($text) {
+﻿function usage($text) {
     $text | Select-String '(?m)^# Usage: ([^\n]*)$' | ForEach-Object { "Usage: " + $_.matches[0].groups[1].value }
 }
 

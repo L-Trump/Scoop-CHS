@@ -1,4 +1,4 @@
-# Usage: scoop search <匹配值>
+﻿# Usage: scoop search <匹配值>
 # Summary: 搜索可用的应用
 # Help:在仓库中搜索可用的应用
 #

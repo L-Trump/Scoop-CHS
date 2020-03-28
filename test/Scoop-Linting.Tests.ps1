@@ -1,4 +1,4 @@
-$repo_dir = (Get-Item $MyInvocation.MyCommand.Path).directory.parent.FullName
+﻿$repo_dir = (Get-Item $MyInvocation.MyCommand.Path).directory.parent.FullName
 
 Describe -Tag 'Linter' "PSScriptAnalyzer" {
     $scoop_modules = Get-ChildItem $repo_dir -Recurse -Include *.psd1, *.psm1, *.ps1

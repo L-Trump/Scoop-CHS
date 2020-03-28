@@ -1,4 +1,4 @@
-function Optimize-SecurityProtocol {
+﻿function Optimize-SecurityProtocol {
     # .NET Framework 4.7+ has a default security protocol called 'SystemDefault',
     # which allows the operating system to choose the best protocol to use.
     # If SecurityProtocolType contains 'SystemDefault' (means .NET4.7+ detected)

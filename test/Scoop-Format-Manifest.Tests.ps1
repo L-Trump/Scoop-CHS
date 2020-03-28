@@ -1,4 +1,4 @@
-. "$psscriptroot\Scoop-TestLib.ps1"
+﻿. "$psscriptroot\Scoop-TestLib.ps1"
 . "$psscriptroot\..\lib\json.ps1"
 . "$psscriptroot\..\lib\manifest.ps1"
 

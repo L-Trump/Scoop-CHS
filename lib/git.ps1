@@ -1,4 +1,4 @@
-function git_proxy_cmd {
+﻿function git_proxy_cmd {
     $proxy = get_config 'proxy'
     $cmd = "git $($args | ForEach-Object { "$_ " })"
     if($proxy -and $proxy -ne 'none') {

@@ -1,4 +1,4 @@
-# Usage: scoop help <命令>
+﻿# Usage: scoop help <命令>
 # Summary: 查看某个命令的和帮助
 param($cmd)
 

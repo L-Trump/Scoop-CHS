@@ -1,4 +1,4 @@
-# Usage: scoop update <应用名> [选项]
+﻿# Usage: scoop update <应用名> [选项]
 # Summary: 更新应用或者Scoop
 # Help: 'scoop update' 用来更新Scoop和仓库到最新版本.
 # 'scoop update <app>' 用来更新应用到最新版本.

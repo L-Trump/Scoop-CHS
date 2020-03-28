@@ -1,1 +1,1 @@
-invoke-pester "$psscriptroot\..\test"
+﻿invoke-pester "$psscriptroot\..\test"

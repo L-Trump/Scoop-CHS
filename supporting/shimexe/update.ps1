@@ -1,4 +1,4 @@
-# https://github.com/edymtt/nugetstandalone
+﻿# https://github.com/edymtt/nugetstandalone
 $destinationFolder = "$psscriptroot\packages"
 if (!(Test-Path -path $destinationFolder)) {
     Write-Host -f Red "Run .\install.ps1 first!"

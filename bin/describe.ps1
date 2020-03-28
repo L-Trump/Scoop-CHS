@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Search for application description on homepage.
 .PARAMETER App

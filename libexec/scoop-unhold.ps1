@@ -1,4 +1,4 @@
-# Usage: scoop unhold <应用名>
+﻿# Usage: scoop unhold <应用名>
 # Summary: 解除锁定来允许应用更新
 
 . "$psscriptroot\..\lib\help.ps1"
