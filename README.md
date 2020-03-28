@@ -9,7 +9,6 @@
 |
 <b><a href="https://github.com/lukesampson/scoop/wiki">文档</a></b>
 </p>
----
 <p align="center" >
     <a href="https://github.com/L-Trump/scoop-CHS">
         <img src="https://img.shields.io/github/languages/code-size/L-Trump/Scoop-CHS.svg" alt="Code Size" />
