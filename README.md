@@ -34,7 +34,7 @@ Scoop是一个Windows上的命令行包管理器
 
 ## 在开始之前
 
-于Powershell控制台对中文编码的支持默认使用GBK字符页，因此Scoop的所有脚本文件已被转成UTF-8-BOM格式，支持GBK页显示，如需使用UTF-8版本见分支[utf8](https://github.com/L-Trump/scoop-CHS/tree/utf8)
+由于Powershell控制台对中文编码的支持默认使用GBK字符页，因此Scoop的所有脚本文件已被转成UTF-8-BOM格式，支持GBK页显示，如需使用UTF-8版本见分支[utf8](https://github.com/L-Trump/scoop-CHS/tree/utf8)
 
 ## 从英文版Scoop升级
 
