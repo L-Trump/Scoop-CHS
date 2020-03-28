@@ -35,19 +35,17 @@ Scoop是一个Windows上的命令行包管理器
 
 ## 在开始之前
 
-首先由于Windows坑爹的特性，简体中文系统Powershell默认的语言编码是GBK，然而Scoop所有的脚本都用的UTF-8编码，导致默认的中文输出全是乱码，所以在安装汉化版Scoop之前，请先进行如下操作：
+由于Powershell控制台对中文编码的支持默认使用GBK字符页，因此Scoop的所有脚本文件已被转成UTF-8-BOM格式，支持GBK页显示，如需使用UTF-8版本见分支(utf8)[https://github.com/L-Trump/scoop-CHS/tree/utf8]
 
-进入控制面板-时钟与区域-区域-管理，在更改系统区域设置中，勾上以下选项
+## 从英文版Scoop升级
 
-![Snipaste_2020-03-27_23-41-25.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-41-25.png)
+**你不需要重装Scoop**！真的！
 
-然后重启就好了。
+打开`C:\Users\<username>\.config\scoop\config.json`，修改SCOOP_REPO项为本项目地址：
 
-需要注意的是这波操作之后powershell面板可能会变得有点丑，可以在powershell窗口顶栏右键-默认值进行配置
+![Snipaste_2020-03-28_12-16-10.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-28_12-16-10.png)
 
-![Snipaste_2020-03-27_23-42-58.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-42-58.png)
-
-![Snipaste_2020-03-27_23-44-18.png](https://xqhma.oss-cn-hangzhou.aliyuncs.com/image/Snipaste_2020-03-27_23-44-18.png)
+然后执行`scoop update`即可。如果你需要使用UTF8，那么把下面的master换成utf8即可
 
 ## Scoop可以做什么
 
@@ -86,10 +84,10 @@ scoop install python ruby go perl
 运行下面命令将Scoop安装到默认目录 (`C:\Users\<user>\scoop`)
 
 ```powershell
-Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/L-Trump/Scoop-CHS/master/bin/install.ps1')
 
 # 或者简写为
-iwr -useb get.scoop.sh | iex
+iwr -useb https://raw.githubusercontent.com/L-Trump/Scoop-CHS/master/bin/install.ps1 | iex
 ```
 
 安装完后使用`scoop help`来获取帮助
