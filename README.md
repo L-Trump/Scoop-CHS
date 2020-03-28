@@ -30,7 +30,9 @@
     </a>
 </p>
 
-Scoop是一个Windows上的命令行包管理器
+Scoop是一个Windows上的命令行包管理器，
+
+更详细教程请移步[我的博客](https://blog.xqh.ma/_posts/2020-03-09-Windows%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8-Scoop%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8&%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90/)
 
 ## 在开始之前
 
@@ -147,7 +149,8 @@ Scoop也支持单文件和Powershell脚本. 例如 [runat](https://github.com/Sc
 以下仓库可以直接添加:
 
 - [main](https://github.com/ScoopInstaller/Main) - Scoop默认仓库，里面基本都是CLI命令行应用
-- [extras](https://github.com/L-Trump/scoop-CHS-extras) - 不符合Main仓库[标准](https://github.com/L-Trump/scoop-CHS/wiki/Criteria-for-including-apps-in-the-main-bucket)的应用很多都到了这里
+- [extras](https://github.com/lukesampson/scoop-extras) - 不符合Main仓库[标准](https://github.com/lukesampson/scoop/wiki/Criteria-for-including-apps-in-the-main-bucket)的应用很多都到了这里
+- [raresoft](https://github.com/L-Trump/scoop-raresoft) - 夹带私货
 - [games](https://github.com/Calinou/scoop-games) - 开源/免费的游戏以及与游戏相关的应用
 - [nerd-fonts](https://github.com/matthewjberger/scoop-nerd-fonts) -  Nerd 字体库
 - [nirsoft](https://github.com/kodybrown/scoop-nirsoft) - [250](https://github.com/rasa/scoop-directory/blob/master/by-score.md#MCOfficer_scoop-nirsoft) [Nirsoft](https://nirsoft.net) 应用的集合
