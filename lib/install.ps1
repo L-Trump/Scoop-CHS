@@ -33,7 +33,7 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
         write-host -f DarkRed "'$app' 不支持 $architecture 版本!"
         return
     }
-
+    $usecurrent = $manifest.usecurrent
     write-output "安装 '$app' ($version) [$architecture]"
 
     $dir = ensure (versiondir $app $version $global)
@@ -44,7 +44,11 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
     pre_install $manifest $architecture
     run_installer $fname $manifest $architecture $dir $global
     ensure_install_dir_not_in_path $dir $global
-    $dir = link_current $dir
+    if(!($usecurrent = 'false')) { 
+        $dir = link_current $dir 
+    } else {
+        Write-Host -f Yellow "Manifest中要求本应用不使用Current目录"
+    }
     create_shims $manifest $dir $global $architecture
     create_startmenu_shortcuts $manifest $dir $global $architecture
     install_psmodule $manifest $dir $global

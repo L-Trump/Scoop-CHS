@@ -533,6 +533,9 @@
         "version": {
             "pattern": "^[\\w\\.\\-_]+$",
             "type": "string"
+        },
+        "usecurrent": {
+            "type": "string"
         }
     },
     "required": [
