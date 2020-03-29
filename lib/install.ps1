@@ -44,10 +44,10 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
     pre_install $manifest $architecture
     run_installer $fname $manifest $architecture $dir $global
     ensure_install_dir_not_in_path $dir $global
-    if(!($usecurrent = 'false')) { 
-        $dir = link_current $dir 
-    } else {
+    if( $usecurrent -eq 'false' ) { 
         Write-Host -f Yellow "Manifest中要求本应用不使用Current目录"
+    } else {
+        $dir = link_current $dir 
     }
     create_shims $manifest $dir $global $architecture
     create_startmenu_shortcuts $manifest $dir $global $architecture
