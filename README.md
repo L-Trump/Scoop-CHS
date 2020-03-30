@@ -48,6 +48,12 @@ Scoop是一个Windows上的命令行包管理器，
 
 然后执行`scoop update`即可。如果你需要使用UTF8，那么把下面的master换成utf8即可
 
+## 和英文版的区别
+
+- 是中文的了（废话）
+- 为`Manifest`中的`checkver`增加了`cookie`和并为`bin\checkver.ps1`增加了`-cookie`以及`-useragent`选项
+- 在`Manifest`中增加主项`usecurrent`，在设定为`false`时（默认为`true`）将不使用Current软链接，以此解决某些软件(e.g. [Adobe After Effects](https://github.com/L-Trump/scoop-raresoft/blob/master/bucket/AdobeAfterEffectsCC2020.json))识别软链接的问题
+
 ## Scoop可以做什么
 
 Scoop 能够十分方便地从命令控制台Powershell中安装软件，它尝试消除以下情况
