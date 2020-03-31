@@ -2,7 +2,7 @@
 # Summary: 安装应用
 # Help: e.g. 常规安装 (使用已添加的仓库):
 #      scoop install git
-# 
+#
 # 指定仓库安装（避免多个仓库拥有同一软件）:
 #      scoop install main/git
 #

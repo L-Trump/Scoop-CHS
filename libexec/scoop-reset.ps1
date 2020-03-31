@@ -1,7 +1,7 @@
 ﻿# Usage: scoop reset <应用名>
 # Summary: 调整应用来解决冲突
 # Help: 用以解决一些特殊应用间的冲突，如：
-# 如果你同时安装了'python'和'python27', 你可以使用 'scoop reset' 
+# 如果你同时安装了'python'和'python27', 你可以使用 'scoop reset'
 # 来决定你使用哪一个
 
 . "$psscriptroot\..\lib\core.ps1"

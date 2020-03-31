@@ -546,11 +546,12 @@ function warn_on_overwrite($shim_ps1, $path) {
     warn "覆盖 $shim_app 创建的Shim $filename"
 }
 
-function shim($path, $global, $name, $arg) {
+function shim($path, $global, $name, $arg, $waitProcess) {
     if(!(test-path $path)) { abort "无法创建Shim '$(fname $path)': 未找到 '$path'." }
     $abs_shimdir = ensure (shimdir $global)
     if(!$name) { $name = strip_ext (fname $path) }
-
+    $shimexeDir = "shimexe"
+    if($waitProcess -eq $true) { $shimexeDir = "shimexe_waitprocess" }
     $shim = "$abs_shimdir\$($name.tolower())"
 
     warn_on_overwrite "$shim.ps1" $path
@@ -578,7 +579,7 @@ function shim($path, $global, $name, $arg) {
 
     if($path -match '\.(exe|com)$') {
         # for programs with no awareness of any shell
-        Copy-Item "$(versiondir 'scoop' 'current')\supporting\shimexe\bin\shim.exe" "$shim.exe" -force
+        Copy-Item "$(versiondir 'scoop' 'current')\supporting\$shimexeDir\bin\shim.exe" "$shim.exe" -force
         write-output "path = $resolved_path" | out-file "$shim.shim" -encoding utf8
         if($arg) {
             write-output "args = $arg" | out-file "$shim.shim" -encoding utf8 -append

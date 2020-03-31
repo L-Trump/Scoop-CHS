@@ -16,7 +16,6 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
     if(!$manifest) {
         abort "$(if($url) { "无法在URL $url 中找到 " }) '$app'."
     }
-
     $version = $manifest.version
     if(!$version) { abort "Manifest中未定义版本号." }
     if($version -match '[^\w\.\-\+_]') {
@@ -33,9 +32,8 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
         write-host -f DarkRed "'$app' 不支持 $architecture 版本!"
         return
     }
-    $usecurrent = $manifest.usecurrent
+    $nocurrent = $manifest.nocurrent
     write-output "安装 '$app' ($version) [$architecture]"
-
     $dir = ensure (versiondir $app $version $global)
     $original_dir = $dir # keep reference to real (not linked) directory
     $persist_dir = persistdir $app $global
@@ -44,10 +42,10 @@ function install_app($app, $architecture, $global, $suggested, $use_cache = $tru
     pre_install $manifest $architecture
     run_installer $fname $manifest $architecture $dir $global
     ensure_install_dir_not_in_path $dir $global
-    if( $usecurrent -eq 'false' ) { 
+    if( $nocurrent -eq $true ) {
         Write-Host -f Yellow "Manifest中要求本应用不使用Current目录"
     } else {
-        $dir = link_current $dir 
+        $dir = link_current $dir
     }
     create_shims $manifest $dir $global $architecture
     create_startmenu_shortcuts $manifest $dir $global $architecture
@@ -804,6 +802,8 @@ function shim_def($item) {
 }
 
 function create_shims($manifest, $dir, $global, $arch) {
+    $waitProc = $manifest.wait_process
+    if ($waitProc -eq $true) { Write-Host "本应用创建的Shim将等待进程运行结束后才会关闭" }
     $shims = @(arch_specific 'bin' $manifest $arch)
     $shims | Where-Object { $_ -ne $null } | ForEach-Object {
         $target, $name, $arg = shim_def $_
@@ -818,7 +818,7 @@ function create_shims($manifest, $dir, $global, $arch) {
         }
         if(!$bin) { abort "无法创造shim '$target': 文件不存在."}
 
-        shim $bin $global $name (substitute $arg @{ '$dir' = $dir; '$original_dir' = $original_dir; '$persist_dir' = $persist_dir})
+        shim $bin $global $name (substitute $arg @{ '$dir' = $dir; '$original_dir' = $original_dir; '$persist_dir' = $persist_dir}) $waitProc
     }
 }
 

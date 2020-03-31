@@ -534,8 +534,11 @@
             "pattern": "^[\\w\\.\\-_]+$",
             "type": "string"
         },
-        "usecurrent": {
-            "type": "string"
+        "nocurrent": {
+            "type": "boolean"
+        },
+        "wait_process": {
+            "type": "boolean"
         }
     },
     "required": [

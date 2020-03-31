@@ -18,7 +18,7 @@
 # --------
 #
 # proxy: [用户名:密码@]地址:端口
-# 
+#
 # e.g.
 #   scoop config proxy 127.0.0.1:1080
 #   scoop config proxy username:password@127.0.0.1:1080
