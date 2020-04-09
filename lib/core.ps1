@@ -546,12 +546,12 @@ function warn_on_overwrite($shim_ps1, $path) {
     warn "覆盖 $shim_app 创建的Shim $filename"
 }
 
-function shim($path, $global, $name, $arg, $waitProcess) {
+function shim($path, $global, $name, $arg, $noWait) {
     if(!(test-path $path)) { abort "无法创建Shim '$(fname $path)': 未找到 '$path'." }
     $abs_shimdir = ensure (shimdir $global)
     if(!$name) { $name = strip_ext (fname $path) }
     $shimexeDir = "shimexe"
-    if($waitProcess -eq $true) { $shimexeDir = "shimexe_waitprocess" }
+    if($noWait -eq $true) { $shimexeDir = "shimexe_nowait" }
     $shim = "$abs_shimdir\$($name.tolower())"
 
     warn_on_overwrite "$shim.ps1" $path

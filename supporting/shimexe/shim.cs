@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 namespace Scoop {
 
     class Program {
-        [DllImport("kernel32.dll", SetLastError=true, CharSet=CharSet.Ansi)]
+        [DllImport("kernel32.dll", SetLastError=true, CharSet=CharSet.Unicode)]
         static extern bool CreateProcess(string lpApplicationName,
             string lpCommandLine, IntPtr lpProcessAttributes,
             IntPtr lpThreadAttributes, bool bInheritHandles,
@@ -22,7 +22,7 @@ namespace Scoop {
             out PROCESS_INFORMATION lpProcessInformation);
         const int ERROR_ELEVATION_REQUIRED = 740;
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         struct STARTUPINFO {
             public Int32 cb;
             public string lpReserved;
@@ -70,7 +70,7 @@ namespace Scoop {
             var name = Path.GetFileNameWithoutExtension(exe);
 
             var configPath = Path.Combine(dir, name + ".shim");
-            //Console.OutputEncoding = System.Text.Encoding.GetEncoding("UTF-8");
+            Console.OutputEncoding = System.Text.Encoding.GetEncoding("UTF-8");
             //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if(!File.Exists(configPath)) {
                 Console.Error.WriteLine("Couldn't find " + Path.GetFileName(configPath) + " in " + dir);
@@ -121,14 +121,14 @@ namespace Scoop {
                 return error;
             }
 
-            // WaitForSingleObject(pi.hProcess, INFINITE);
+            WaitForSingleObject(pi.hProcess, INFINITE);
 
             uint exit_code = 0;
-            // GetExitCodeProcess(pi.hProcess, out exit_code);
+            GetExitCodeProcess(pi.hProcess, out exit_code);
 
             // Close process and thread handles.
-            // CloseHandle(pi.hProcess);
-            // CloseHandle(pi.hThread);
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
 
             return (int)exit_code;
         }

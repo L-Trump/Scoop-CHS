@@ -802,13 +802,12 @@ function shim_def($item) {
 }
 
 function create_shims($manifest, $dir, $global, $arch) {
-    $waitProc = $manifest.wait_process
-    if ($waitProc -eq $true) { Write-Host "本应用创建的Shim将等待进程运行结束后才会关闭" }
+    $noWait = $manifest.nowait
     $shims = @(arch_specific 'bin' $manifest $arch)
     $shims | Where-Object { $_ -ne $null } | ForEach-Object {
         $target, $name, $arg = shim_def $_
         write-output "为 '$name' 创造 Shim."
-
+        if ($nowait -eq $true) { Write-Host "本应用创建的Shim将不等待进程运行结束后关闭" }
         if(test-path "$dir\$target" -pathType leaf) {
             $bin = "$dir\$target"
         } elseif(test-path $target -pathType leaf) {
@@ -818,7 +817,7 @@ function create_shims($manifest, $dir, $global, $arch) {
         }
         if(!$bin) { abort "无法创造shim '$target': 文件不存在."}
 
-        shim $bin $global $name (substitute $arg @{ '$dir' = $dir; '$original_dir' = $original_dir; '$persist_dir' = $persist_dir}) $waitProc
+        shim $bin $global $name (substitute $arg @{ '$dir' = $dir; '$original_dir' = $original_dir; '$persist_dir' = $persist_dir}) $noWait
     }
 }
 

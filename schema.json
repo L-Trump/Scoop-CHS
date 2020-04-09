@@ -537,7 +537,7 @@
         "nocurrent": {
             "type": "boolean"
         },
-        "wait_process": {
+        "nowait": {
             "type": "boolean"
         }
     },
