@@ -70,7 +70,7 @@ namespace Scoop {
             var name = Path.GetFileNameWithoutExtension(exe);
 
             var configPath = Path.Combine(dir, name + ".shim");
-            Console.OutputEncoding = System.Text.Encoding.GetEncoding("UTF-8");
+            //Console.OutputEncoding = System.Text.Encoding.GetEncoding("UTF-8");
             //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if(!File.Exists(configPath)) {
                 Console.Error.WriteLine("Couldn't find " + Path.GetFileName(configPath) + " in " + dir);

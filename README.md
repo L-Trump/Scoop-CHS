@@ -53,7 +53,7 @@ Scoop是一个Windows上的命令行包管理器，
 - 是中文的了（废话）
 - 为`Manifest`中的`checkver`增加了`cookie`和并为`bin\checkver.ps1`增加了`-cookie`以及`-useragent`选项
 - 在`Manifest`中增加主项`nocurrent`，在设定为`true`时（默认为`false`，是布尔值）将不使用current软链接，以此解决某些软件(e.g. [Adobe After Effects](https://github.com/L-Trump/scoop-raresoft/blob/master/bucket/AdobeAfterEffectsCC2020.json))识别软链接的问题
-- 解决了shim链接启动某些应用时控制台窗口一直停留的问题，为此在`Manifest`中添加了项`wait_process`，设定为`true`时（默认为`false`，是布尔值）shim窗口将等待进程结束再关闭，否则调用进程后就关闭。
+- 解决了shim链接启动某些应用时控制台窗口一直停留的问题，为此在`Manifest`中添加了项`nowait`，设定为`true`时（默认为`false`，是布尔值）shim窗口将不再等待进程结束再关闭。
 
 ## Scoop可以做什么
 
