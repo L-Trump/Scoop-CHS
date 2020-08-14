@@ -59,20 +59,8 @@ function install_info($app, $version, $global) {
 }
 
 function default_architecture {
-    $arch = get_config 'default-architecture'
-    $system = if ([Environment]::Is64BitOperatingSystem) { '64bit' } else { '32bit' }
-    if ($null -eq $arch) {
-        $arch = $system
-    } else {
-        try {
-            $arch = ensure_architecture $arch
-        } catch {
-            warn '默认架构配置不可用. 正在获取系统架构'
-            $arch = $system
-        }
-    }
-
-    return $arch
+    if ([Environment]::Is64BitOperatingSystem) { return "64bit" }
+    "32bit"
 }
 
 function arch_specific($prop, $manifest, $architecture) {

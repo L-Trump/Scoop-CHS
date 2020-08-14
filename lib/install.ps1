@@ -358,7 +358,7 @@ function dl($url, $to, $cookies, $progress) {
     $wreq = [net.webrequest]::create($reqUrl)
     if($wreq -is [net.httpwebrequest]) {
         $wreq.useragent = Get-UserAgent
-        if (-not ($url -imatch "sourceforge\.net")) {
+        if (-not ($url -imatch "sourceforge\.net" -or $url -imatch "portableapps\.com")) {
             $wreq.referer = strip_filename $url
         }
         if($cookies) {
@@ -1023,11 +1023,11 @@ function prune_installed($apps, $global) {
 
 # check whether the app failed to install
 function failed($app, $global) {
-    if (is_directory (appdir $app $global)) {
-        return !(install_info $app (current_version $app $global) $global)
-    } else {
-        return $false
-    }
+    $ver = current_version $app $global
+    if(!$ver) { return $false }
+    $info = install_info $app $ver $global
+    if(!$info) { return $true }
+    return $false
 }
 
 function ensure_none_failed($apps, $global) {

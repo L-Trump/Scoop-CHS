@@ -294,6 +294,7 @@ while ($in_progress -gt 0) {
                 $ver = $matchesHashtable['version']
             }
         } else {
+            Write-Host $page
             next "couldn't match '$regexp' in $url"
             continue
         }

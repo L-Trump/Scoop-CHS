@@ -50,14 +50,3 @@ function check_long_paths {
 
     return $true
 }
-
-function check_envs_requirements {
-    if ($null -eq $env:COMSPEC) {
-        warn '$env:COMSPEC 环境变量未找到.'
-        Write-Host "    在windows中环境变量通常指向 cmd.exe: '%SystemRoot%\system32\cmd.exe'."
-
-        return $false
-    }
-
-    return $true
-}
